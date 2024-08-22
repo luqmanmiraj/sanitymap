@@ -8,7 +8,9 @@ import {seasonType} from './seasonType' // Corrected to match the actual file na
 import {languagesType} from './languagesType'
 import {explorerType} from './explorerType'
 import {accessibilityType} from './accessibilityType'
+import {participantType} from './participantType'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [blockContentType, categoryType, postType, authorType, seasonType, languagesType, explorerType, accessibilityType],
+  types: [blockContentType, categoryType, postType, authorType, seasonType, languagesType, explorerType, accessibilityType, participantType],
 }
+

@@ -83,12 +83,17 @@ export const postType = defineType({
       of: [defineArrayMember({type: 'reference', to: {type: 'explorer'}})],
     }),
     defineField({
+      name: 'participant',
+      type: 'array',
+      of: [defineArrayMember({type: 'reference', to: {type: 'participant'}})],
+    }),
+    defineField({
       name: 'startDate',
       type: 'date',
       title: 'Start Date',
     }),
     defineField({
-      name: 'location',
+      name: 'location', 
       type: 'geopoint',
       title: 'Location',
     }),
