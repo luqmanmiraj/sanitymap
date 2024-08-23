@@ -70,7 +70,7 @@ export default function Page() {
                 <CategoryNav events={events} />
                 <div className="w-full lg:w-1/3 p-2">
       <div className="w-full h-[500px] sm:w-[436px] sm:h-[750px] rounded-[32px] overflow-hidden">
-        <GoogleMap updateBounds={updateBounds} />
+        <GoogleMap events={events} updateBounds={updateBounds} />
       </div>
     </div>
                 </div>
@@ -91,9 +91,7 @@ export default function Page() {
                     </li>
                 ))}
             </ul>
-            <div className="flex justify-center items-center">
-                <GoogleMap events={events} updateBounds={updateBounds} />
-            </div>
+           
         </div>
     );
 }

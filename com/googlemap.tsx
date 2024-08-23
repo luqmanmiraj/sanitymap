@@ -1,16 +1,26 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { GoogleMap as GoogleMapComponent, LoadScript, Marker } from '@react-google-maps/api';
 
-
+interface Post {
+  lat: number;
+  lng: number;
+}
 
 interface GoogleMapProps {
     events: any;
     updateBounds: (newBounds: google.maps.LatLngBounds) => void;
 }
 
+interface Event {
+  location: {
+    lat: number;
+    lng: number;
+  };
+}
+
 const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
   const [userLocation, setUserLocation] = useState({ lat: 52.5, lng: -104 });
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -65,8 +75,8 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
         onBoundsChanged={onBoundsChanged}
       >
         <Marker position={userLocation} />
-        {posts.map((post, index) => (
-          <Marker key={index} position={{ lat: post.lat, lng: post.lng }} />
+        {events &&events.length > 0 && events.map((event: Event, index: number) => (
+          <Marker key={index} position={{ lat: event.location.lat, lng: event.location.lng }} />
         ))}
       </GoogleMapComponent>
     </LoadScript>
