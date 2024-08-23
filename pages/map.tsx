@@ -65,7 +65,15 @@ export default function Page() {
             <Header />
             
                 <HeroSection />
-                <CategoryNav />
+  <div className="flex flex-col lg:flex-row w-full" style={{ backgroundColor: '#FFFFFF' }}>
+
+                <CategoryNav events={events} />
+                <div className="w-full lg:w-1/3 p-2">
+      <div className="w-full h-[500px] sm:w-[436px] sm:h-[750px] rounded-[32px] overflow-hidden">
+        <GoogleMap updateBounds={updateBounds} />
+      </div>
+    </div>
+                </div>
             <h1 className="text-4xl font-bold tracking-tighter">
                 Events
             </h1>
@@ -84,7 +92,7 @@ export default function Page() {
                 ))}
             </ul>
             <div className="flex justify-center items-center">
-                <GoogleMap updateBounds={updateBounds} />
+                <GoogleMap events={events} updateBounds={updateBounds} />
             </div>
         </div>
     );

@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { GoogleMap as GoogleMapComponent, LoadScript, Marker } from '@react-google-maps/api';
 
-const containerStyle = {
-  width: '300px',
-  height: '700px'
-};
+
 
 interface GoogleMapProps {
+    events: any;
     updateBounds: (newBounds: google.maps.LatLngBounds) => void;
 }
 
-const GoogleMap: React.FC<GoogleMapProps> = ({ updateBounds }) => {
+const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
   const [userLocation, setUserLocation] = useState({ lat: 52.5, lng: -104 });
   const [posts, setPosts] = useState([]);
 
@@ -52,7 +50,6 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ updateBounds }) => {
     mapRef.current = map;
     const mapBounds = map.getBounds();
     if (mapBounds) {
-      setBounds(mapBounds);
       fetchPosts(mapBounds);
       updateBounds(mapBounds);
     }
@@ -61,7 +58,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ updateBounds }) => {
   return (
     <LoadScript googleMapsApiKey="AIzaSyBXV0elgfYX_C0zJCVkrHpQXLQdxIa5t_0">
       <GoogleMapComponent
-        mapContainerStyle={containerStyle}
+        mapContainerStyle={{ width: '100%', height: '100%' }}
         center={userLocation}
         zoom={10}
         onLoad={onLoad}
