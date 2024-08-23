@@ -1,8 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import HeroSection from '../components/HeroSection/HeroSection';
+import Header from '../components/Header/Header';
+import CategoryNav from '../components/CategoryNav/CategoryNav';
+
+
+
+const GoogleMap = dynamic(() => import('../com/googlemap'), { ssr: false });
+
+interface Event {
+    _id: string;
+    slug: { current: string };
+    title: string;
+    date: string;
+    // Add other properties if needed
+}
 
 export default function Page() {
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<Event[]>([]);
     const [totalPosts, setTotalPosts] = useState(0);
+    const [bounds, setBounds] = useState<google.maps.LatLngBounds | null>(null);
+
+ 
+    const updateBounds = (newBounds: google.maps.LatLngBounds) => {
+        setBounds(newBounds);
+        console.log('newBounds', newBounds);
+    };
+    
 
     useEffect(() => {
         async function fetchEvents() {
@@ -23,10 +47,9 @@ export default function Page() {
 
     const handleClick = async (slug: string) => {
         const url = new URL(window.location.href);
-        url.searchParams.set('lat', '30.7');
+        url.searchParams.set('lat', '30.9');
         window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
         
-        // Recall the API to fetch updated events
         try {
             const response = await fetch(`/api/posts?${url.searchParams.toString()}`);
             const data = await response.json();
@@ -38,7 +61,11 @@ export default function Page() {
     };
 
     return (
-        <main className="flex bg-gray-100 min-h-screen flex-col p-24 gap-12">
+        <div className="home-page" style={{ backgroundColor: '#f8f8f8', padding: '30px' }}>
+            <Header />
+            
+                <HeroSection />
+                <CategoryNav />
             <h1 className="text-4xl font-bold tracking-tighter">
                 Events
             </h1>
@@ -56,6 +83,9 @@ export default function Page() {
                     </li>
                 ))}
             </ul>
-        </main>
+            <div className="flex justify-center items-center">
+                <GoogleMap updateBounds={updateBounds} />
+            </div>
+        </div>
     );
 }
