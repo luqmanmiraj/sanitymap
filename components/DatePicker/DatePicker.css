@@ -1,0 +1,40 @@
+
+.date-range-picker {
+    display: flex;
+    justify-content: space-between;
+}
+
+.month {
+    width: 45%;
+}
+
+.month-header {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.day, .day-name {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.day.empty {
+    background-color: transparent;
+    cursor: default;
+}
+
+.day.selected {
+    background-color: black;
+    color: white;
+}
+
+.day.in-range {
+    background-color: lightgray;
+}

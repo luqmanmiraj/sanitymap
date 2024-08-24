@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic';
 import HeroSection from '../components/HeroSection/HeroSection';
 import Header from '../components/Header/Header';
 import CategoryNav from '../components/CategoryNav/CategoryNav';
+import Pagination from '../components/Pagination/Pagination';
+import DatePicker from '../components/DatePicker/DatePicker';
 
 
 
@@ -13,37 +15,51 @@ interface Event {
     slug: { current: string };
     title: string;
     date: string;
-    // Add other properties if needed
 }
 
 export default function Page() {
     const [events, setEvents] = useState<Event[]>([]);
     const [totalPosts, setTotalPosts] = useState(0);
     const [bounds, setBounds] = useState<google.maps.LatLngBounds | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
  
     const updateBounds = (newBounds: google.maps.LatLngBounds) => {
         setBounds(newBounds);
         console.log('newBounds', newBounds);
     };
-    
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        console.log('currentPage', currentPage);
+
+        // fetchEvents(page);
+
+    };
+    async function fetchEvents(page: number) {
+        console.log('fetchEvents', page);
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', page.toString());
+            window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
+            const response = await fetch(`/api/posts?${url.searchParams.toString()}`);
+            const data = await response.json();
+            console.log(data);
+            setEvents(data.events);
+            setTotalPosts(data.totalPosts);
+            // setCurrentPage(page);
+        } catch (error) {
+            console.error('Failed to fetch events:', error);
+        }
+    }
 
     useEffect(() => {
-        async function fetchEvents() {
-            try {
-                const url = new URL(window.location.href);
-                const response = await fetch(`/api/posts?${url.searchParams.toString()}`);
-                const data = await response.json();
-                console.log(data);
-                setEvents(data.events);
-                setTotalPosts(data.totalPosts);
-            } catch (error) {
-                console.error('Failed to fetch events:', error);
-            }
+        const urlParams = new URLSearchParams(window.location.search);
+        const pageFromUrl = urlParams.get('page');
+        if (pageFromUrl) {
         }
+        fetchEvents(currentPage);
 
-        fetchEvents();
-    }, []);
+    }, [currentPage]); 
 
     const handleClick = async (slug: string) => {
         const url = new URL(window.location.href);
@@ -61,37 +77,26 @@ export default function Page() {
     };
 
     return (
-        <div className="home-page" style={{ backgroundColor: '#f8f8f8', padding: '30px' }}>
-            <Header />
-            
+            <div className="home-page" style={{ backgroundColor: '#f8f8f8', padding: '30px' }}>
+                <Header />
                 <HeroSection />
-  <div className="flex flex-col lg:flex-row w-full" style={{ backgroundColor: '#FFFFFF' }}>
-
-                <CategoryNav events={events} />
-                <div className="w-full lg:w-1/3 p-2">
-      <div className="w-full h-[500px] sm:w-[436px] sm:h-[750px] rounded-[32px] overflow-hidden">
-        <GoogleMap events={events} updateBounds={updateBounds} />
-      </div>
-    </div>
+                <div className="flex flex-col lg:flex-row w-full" style={{ backgroundColor: '#FFFFFF' }}>
+                        <CategoryNav events={events} />
+                    <div className="w-full lg:w-1/3 p-2">
+                        <div className="w-full h-[500px] sm:w-[436px] sm:h-[750px] rounded-[32px] overflow-hidden">
+                            <GoogleMap events={events} updateBounds={updateBounds} />
+                        </div>
+                    </div>
                 </div>
-            <h1 className="text-4xl font-bold tracking-tighter">
-                Events
-            </h1>
-            <ul className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-                {events.map((event) => (
-                    <li
-                        className="bg-white p-4 rounded-lg"
-                        key={event._id}
-                        onClick={() => handleClick(event.slug.current)}
-                    >
-                        <h2 className="text-xl font-semibold">{event?.title}</h2>
-                        <p className="text-gray-500">
-                            {new Date(event?.date).toLocaleDateString()}
-                        </p>
-                    </li>
-                ))}
-            </ul>
-           
+                <Pagination totalPosts={totalPosts} currentPage={currentPage} handlePageChange={handlePageChange} />
+                <p className="text-1xl font-bold tracking-tighter">
+                    {events.length > 0 ? JSON.stringify(events[0]) : 'No events found'}
+                </p>
+                <div>
+            <h1>Date Picker</h1>
+            <DatePicker />
         </div>
+            
+            </div>
     );
 }
