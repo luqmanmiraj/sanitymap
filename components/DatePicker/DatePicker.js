@@ -50,11 +50,11 @@ const DatePicker = () => {
     };
 
     const renderMonth = (month, year) => (
-        <div className="month">
-            <div className="month-header">{new Date(year, month).toLocaleString('default', { month: 'long' })} {year}</div>
-            <div className="days">
+        <div className="w-[45%]">
+            <div className="text-center font-bold mb-2">{new Date(year, month).toLocaleString('default', { month: 'long' })} {year}</div>
+            <div className="grid grid-cols-7 ">
                 {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
-                    <div key={day} className="day-name">{day}</div>
+                    <div key={day} className="text-center p-2 cursor-pointer">{day}</div>
                 ))}
                 {renderDays(month, year)}
             </div>

@@ -5,6 +5,11 @@ import Header from '../components/Header/Header';
 import CategoryNav from '../components/CategoryNav/CategoryNav';
 import Pagination from '../components/Pagination/Pagination';
 import DatePicker from '../components/DatePicker/DatePicker';
+import Months from '../components/Months/Months';
+import More from '../components/More/More';
+
+
+
 
 
 
@@ -95,6 +100,8 @@ export default function Page() {
                 <div>
             <h1>Date Picker</h1>
             <DatePicker />
+            <Months />  
+            <More />
         </div>
             
             </div>
