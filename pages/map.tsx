@@ -7,6 +7,7 @@ import Pagination from '../components/Pagination/Pagination';
 import DatePicker from '../components/DatePicker/DatePicker';
 import Months from '../components/Months/Months';
 import More from '../components/More/More';
+import CategoryDropDown from '../components/CategoryDropDown/CategoryDropDown';
 
 
 
@@ -102,6 +103,7 @@ export default function Page() {
             <DatePicker />
             <Months />  
             <More />
+            <CategoryDropDown />
         </div>
             
             </div>
