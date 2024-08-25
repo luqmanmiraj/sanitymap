@@ -28,15 +28,14 @@ export const categoryType = defineType({
       type: 'reference',
       to: [{type: 'category'}],
     }),
-    defineField({
-      name: 'childCategories',
-      type: 'array',
-      of: [{type: 'reference', to: {type: 'category'}}],
-    }),
+
     defineField({
       name: 'image',
       type: 'image',
     }),
-
+    defineField({
+      name: 'sortorder',
+      type: 'number',
+    }),
   ],
 })

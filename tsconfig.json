@@ -22,6 +22,6 @@
     },
     "target": "ES2017"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "pages/_app.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "pages/_app.js", "src/sanity/structure.js", "src/sanity/structure.js"],
   "exclude": ["node_modules"]
 }
