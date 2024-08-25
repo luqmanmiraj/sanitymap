@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './HeroSection.css';
 import CategoryDropDown from '../CategoryDropDown/CategoryDropDown';
 
-const HeroSection = ({categories}) => {
+const HeroSection = ({selectedCategories, categories, handleCategoriesSelected}) => {
   const [visibleCategory, setVisibleCategory] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const [selectedCategoryChildren, setSelectedCategoryChildren] = useState([]);
@@ -20,7 +20,7 @@ const HeroSection = ({categories}) => {
     <section className="hero bg-cover bg-center relative" style={{ backgroundColor: '#FFFFFF', height: '122px' }}>
       <div className="overlay absolute inset-0 flex flex-col justify-center items-center text-white">
         <div className="category-icons flex overflow-x-auto whitespace-nowrap gap-1 pb-4 w-full px-4 justify-center items-center"> {/* Adjusted gap and removed md:flex-wrap */}
-          {categories.map((category) => (
+          { categories && categories.map((category) => (
             <React.Fragment key={category._id}>
               <span id={category._id} className={`bg-white text-gray-800 py-2 px-4 rounded-full flex flex-col items-center flex-shrink-0 ${category.slug.current}`} onClick={(event) => handleCategoryClick(category, event)}>
                 {category.description && (
@@ -30,7 +30,7 @@ const HeroSection = ({categories}) => {
               </span>
               {visibleCategory === category._id && (
                 <div style={{ position: 'fixed', top: dropdownPosition.top, left: dropdownPosition.left, zIndex: 9999, color: 'black' }}>
-                  <CategoryDropDown category={category} />
+                  <CategoryDropDown selectedCategories={selectedCategories} category={category} handleCategoriesSelected={handleCategoriesSelected} />
                 </div>
               )}
             </React.Fragment>

@@ -1,6 +1,10 @@
 import React from 'react';
 
 const Pagination = ({ totalPosts, currentPage, handlePageChange }) => {
+  if (totalPosts <= 6) {
+    return null;
+  }
+
   const totalPages = Math.ceil(totalPosts / 6);
   const buttons = [];
   for (let i = 1; i <= totalPages; i++) {

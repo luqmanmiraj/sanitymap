@@ -5,12 +5,10 @@ const EVENTS_QUERY = `*[_type == "post"][0...${POSTS_COUNT}]`;
 const TOTAL_POSTS_QUERY = `count(*[_type == "post"])`;
 // const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]{title, slug, _id}`;
 const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]| order(sortorder asc){
-  title, 
-  slug, 
-  _id,
-  description,
-  sortorder,
-  "childCategories": *[_type == "category" && parentCategory._ref == ^._id]| order(sortorder asc){title, slug, _id, description, sortorder}
+  ...,
+  "childCategories": *[_type == "category" && parentCategory._ref == ^._id]| order(sortorder asc){
+    ...
+  }
 }`;
 const ACCESSIBILITY_QUERY = `*[_type == "accessibility"]{title, _id}`;
 const LANGUAGES_QUERY = `*[_type == "language"]{title, _id}`;
@@ -24,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const lat = url.searchParams.get('lat');
     const lng = url.searchParams.get('lng');
   try {
-    const events = await sanityAllPosts({
+    const posts = await sanityAllPosts({
       query: EVENTS_QUERY,
     });
     const totalPosts = await sanityAllPosts({
@@ -48,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const seasons = await sanityAllPosts({
       query: SEASONS_QUERY,
     });
-    res.status(200).json({ events, totalPosts, categories, accessibility, languages, explorers, participants, seasons });
+    res.status(200).json({ posts, totalPosts, categories, accessibility, languages, explorers, participants, seasons });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch posts' });
   }

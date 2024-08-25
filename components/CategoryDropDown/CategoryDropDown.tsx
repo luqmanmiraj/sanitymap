@@ -2,35 +2,33 @@ import React, { useState, ReactNode } from 'react';
 
 interface CategoryDropDownProps {
   children: ReactNode[];
-  category: { childCategories: ReactNode[] }; // Changed this line to make category an object type with a children array
+  category: { childCategories: { slug: { current: string }, title: string }[] };
+  handleCategoriesSelected: (selectedActivities: string[]) => void;
+  selectedCategories: string[]; // Added this line
 }
 
-const CategoryDropDown: React.FC<CategoryDropDownProps> = ({ category }) => {
-  console.log("category", category);
-  const [selectedActivities, setSelectedActivities] = useState<string[]>([
-    'Adrenaline',
-    'Camping',
-    'Cycling & mountain biking',
-    'Golfing',
-  ]);
+const CategoryDropDown: React.FC<CategoryDropDownProps> = ({ selectedCategories, category, handleCategoriesSelected }) => {
+  console.log("selected category", selectedCategories);
+  const [selectedActivities, setSelectedActivities] = useState<string[]>([...selectedCategories]);
   const [isVisible, setIsVisible] = useState(true);
 
   const handleClearAll = () => {
     setSelectedActivities([]);
   }
 
-
-
-  const handleCheckboxChange = (activity: string) => {
+  const handleCheckboxChange = (activitySlug: string) => {
     setSelectedActivities(prevState =>
-      prevState.includes(activity)
-        ? prevState.filter(item => item !== activity)
-        : [...prevState, activity]
+      prevState.includes(activitySlug)
+        ? prevState.filter(item => item !== activitySlug)
+        : [...prevState, activitySlug]
     );
   };
 
   const handleCloseClick = () => {
     setIsVisible(false);
+    if (selectedActivities.length > 0) {
+      handleCategoriesSelected(selectedActivities);
+    }
   };
 
   if (!isVisible) {
@@ -44,21 +42,18 @@ const CategoryDropDown: React.FC<CategoryDropDownProps> = ({ category }) => {
         <button className="text-xl font-bold text-gray-600" onClick={handleCloseClick}>&times;</button>
       </div>
       <div className="space-y-2">
-        {category && category.childCategories.map((category: any, index: number) => {
-          // if (React.isValidElement(category) && typeof category.props.title === 'string') {
-            return (
-              <label key={index} className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  // checked={selectedActivities.includes(child.props.title)}
-                  // onChange={() => handleCheckboxChange(child.props.title)}
-                />
-                {category.title} {/* Use the string directly */}
-              </label>
-            );
-          // }
-          return null;
+        {category && category.childCategories.map((childCategory: any, index: number) => {
+          return (
+            <label key={index} className="flex items-center">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={selectedActivities.includes(childCategory.slug.current)}
+                onChange={() => handleCheckboxChange(childCategory.slug.current)}
+              />
+              {childCategory.title} {/* Use the string directly */}
+            </label>
+          );
         })}
       </div>
       <button className="mt-4 w-full py-2 bg-white border border-black rounded-lg flex items-center justify-between px-4">
