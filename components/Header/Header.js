@@ -21,18 +21,24 @@ const Header = ({selectedSeason, handleSeasonsSelected}) => {
     const rect = event.target.getBoundingClientRect();
     setModalPosition({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX - 290 }); // Center horizontally
     setShowModal(!showModal);
+    setShowWhoModal(false);
+    setShowMoreModal(false);
   };
 
   const toggleWhoModal = (event) => {
     const rect = event.target.getBoundingClientRect();
     setWhoModalPosition({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX - 290 }); // Center horizontally
     setShowWhoModal(!showWhoModal);
+    setShowModal(false);
+    setShowMoreModal(false);
   };
 
   const toggleMoreModal = (event) => {
     const rect = event.target.getBoundingClientRect();
     setMoreModalPosition({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX - 290 }); // Center horizontally
     setShowMoreModal(!showMoreModal);
+    setShowModal(false);
+    setShowWhoModal(false);
   };
 
   const handleTabClick = (tab) => {

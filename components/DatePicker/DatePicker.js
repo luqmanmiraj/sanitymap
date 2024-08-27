@@ -17,7 +17,6 @@ const DatePicker = () => {
 
     const handleDateClick = (date) => {
      
-        confirm(date);
         const url = new URL(window.location.href);
 
         url.searchParams.set('dateRange', ``);

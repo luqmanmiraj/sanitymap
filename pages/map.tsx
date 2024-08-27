@@ -125,14 +125,14 @@ export default function Page() {
                     </div>
                 </div>
                 <Pagination totalPosts={totalPosts} currentPage={currentPage} handlePageChange={handlePageChange} />
-                <p className="text-1xl font-bold tracking-tighter">
+                {/* <p className="text-1xl font-bold tracking-tighter">
                     Posts: {posts.length > 0 ? JSON.stringify(posts[0]) : 'No events found'}
-                </p>
+                </p> */}
                 <div>
-            <h1>Date Picker</h1>
-            <DatePicker />
-            <Months />  
-            <More />
+            {/* <h1>Date Picker</h1> */}
+            {/* <DatePicker /> */}
+            {/* <Months />   */}
+            {/* <More /> */}
         </div>
             
             </div>
