@@ -1,10 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Preferences: React.FC = () => {
   const [explorerTypes, setExplorerTypes] = useState<string[]>([]);
   const [budget, setBudget] = useState<string>('Low-cost');
   const [accessibility, setAccessibility] = useState<string[]>([]);
   const [languages, setLanguages] = useState<string[]>([]);
+
+  const updateUrlParams = (key: string, values: string[]) => {
+    const url = new URL(window.location.href);
+    if (values.length > 0) {
+      url.searchParams.set(key, values.join(','));
+    } else {
+      url.searchParams.delete(key);
+    }
+    window.history.pushState({}, '', url.toString());
+  };
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const explorerTypesFromUrl = url.searchParams.get('explorerTypes')?.split(',') || [];
+    const budgetFromUrl = url.searchParams.get('budget') || 'Low-cost';
+    const accessibilityFromUrl = url.searchParams.get('accessibility')?.split(',') || [];
+    const languagesFromUrl = url.searchParams.get('languages')?.split(',') || [];
+
+    setExplorerTypes(explorerTypesFromUrl);
+    setBudget(budgetFromUrl);
+    setAccessibility(accessibilityFromUrl);
+    setLanguages(languagesFromUrl);
+  }, []);
+
+  useEffect(() => {
+    updateUrlParams('explorerTypes', explorerTypes);
+  }, [explorerTypes]);
+
+  useEffect(() => {
+    updateUrlParams('budget', [budget]);
+  }, [budget]);
+
+  useEffect(() => {
+    updateUrlParams('accessibility', accessibility);
+  }, [accessibility]);
+
+  useEffect(() => {
+    updateUrlParams('languages', languages);
+  }, [languages]);
 
   const handleCheckboxChange = (setState: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
     setState(prevState => 

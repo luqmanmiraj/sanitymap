@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const months: string[] = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
@@ -8,8 +8,25 @@ const months: string[] = [
 const Months: React.FC = () => {
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
 
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        const month = url.searchParams.get('month');
+        if (month) {
+            const monthIndex = months.indexOf(month);
+            if (monthIndex !== -1) {
+                setSelectedMonth(monthIndex);
+            }
+        }
+    }, []);
+
     const handleMonthClick = (index: number) => {
         setSelectedMonth(index);
+        const url = new URL(window.location.href);
+        url.searchParams.set('month', months[index]);
+        url.searchParams.delete('season');
+        window.history.pushState({}, '', url.pathname + url.search);
+    url.searchParams.delete('dateRange');
+    window.history.pushState({}, '', url.pathname + url.search);
     };
 
     return (

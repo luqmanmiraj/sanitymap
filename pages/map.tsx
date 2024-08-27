@@ -28,6 +28,7 @@ interface Data {
 
 export default function Page() {
     const [data, setData] = useState<Data>({ categories: [] });
+    const [selectedSeason, setSelectedSeason] = useState<string>('');
     const [posts, setPosts] = useState<Event[]>([]);
     const [totalPosts, setTotalPosts] = useState(0);
     const [bounds, setBounds] = useState<google.maps.LatLngBounds | null>(null);
@@ -63,6 +64,10 @@ export default function Page() {
         url.searchParams.set('categories', Array.from(selectedCategories).join(','));
         window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
         fetchEvents(1);
+    };
+
+    const handleSeasonsSelected = (selectedSeason: string) => {
+        setSelectedSeason(selectedSeason);
     };
     const fetchEvents = useCallback(async (page: number) => {
         console.log('fetchEvents', page);
@@ -109,7 +114,7 @@ export default function Page() {
 
     return (
             <div className="home-page" style={{ backgroundColor: '#f8f8f8', padding: '30px' }}>
-                <Header />
+                <Header selectedSeason={selectedSeason} handleSeasonsSelected={handleSeasonsSelected} />
                 <HeroSection selectedCategories={Array.from(selectedCategories)} categories={data.categories} handleCategoriesSelected={handleCategoriesSelected} />
                 <div className="flex flex-col lg:flex-row w-full" style={{ backgroundColor: '#FFFFFF' }}>
                         <CategoryNav events={posts} />

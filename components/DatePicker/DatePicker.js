@@ -1,12 +1,33 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './DatePicker.css';
 
 const DatePicker = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        const dateRange = url.searchParams.get('dateRange');
+        if (dateRange) {
+            const [start, end] = dateRange.split('_');
+            setStartDate(new Date(start));
+            setEndDate(new Date(end));
+        }
+    }, []);
+
     const handleDateClick = (date) => {
+     
+        confirm(date);
+        const url = new URL(window.location.href);
+
+        url.searchParams.set('dateRange', ``);
+        window.history.pushState({}, '', url.pathname + url.search);
+        url.searchParams.delete('month');
+        window.history.pushState({}, '', url.pathname + url.search);
+        url.searchParams.delete('season');
+        window.history.pushState({}, '', url.pathname + url.search);
+
+
         if (!startDate || (startDate && endDate)) {
             setStartDate(date);
             setEndDate(null);
@@ -14,10 +35,18 @@ const DatePicker = () => {
             if (date < startDate) {
                 setEndDate(startDate);
                 setStartDate(date);
+                url.searchParams.set('dateRange', `${date.toISOString().split('T')[0]}_${startDate.toISOString().split('T')[0]}`);
+                window.history.pushState({}, '', url.pathname + url.search);
+
             } else {
                 setEndDate(date);
+                url.searchParams.set('dateRange', `${startDate.toISOString().split('T')[0]}_${date.toISOString().split('T')[0]}`);
+                window.history.pushState({}, '', url.pathname + url.search);
             }
         }
+        console.log('startDate', startDate);
+        console.log('endDate', endDate);
+
     };
 
     const renderDays = (month, year) => {
