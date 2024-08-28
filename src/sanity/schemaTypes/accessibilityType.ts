@@ -9,5 +9,13 @@ export const accessibilityType = defineType({
       name: 'title',
       type: 'string',
     }),
+    defineField({
+      name: 'slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+    }),
   ],
 })
