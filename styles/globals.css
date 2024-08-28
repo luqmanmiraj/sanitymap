@@ -31,3 +31,19 @@ body {
     text-wrap: balance;
   }
 }
+body {
+  color: black;
+  background: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgb(var(--background-end-rgb))
+      )
+      rgb(var(--background-start-rgb));
+  }
+}

@@ -63,7 +63,7 @@ const Header = ({selectedSeason, handleSeasonsSelected}) => {
       </header>
       {showModal && (
         <div className="fixed z-50" style={{ top: modalPosition.top, left: modalPosition.left }}>
-          <div className="bg-white w-[580px] p-4 pb-8  border border-white relative">
+          <div className="bg-white w-[657px] p-4 pb-8  border border-white relative">
             <button onClick={toggleModal} className="absolute top-4 right-4 text-gray-600 hover:text-gray-800">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

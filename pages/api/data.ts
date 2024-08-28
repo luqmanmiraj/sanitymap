@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sanityAllPosts } from '../../src/sanity/lib/client';
-const POSTS_COUNT = 6;
-const EVENTS_QUERY = `*[_type == "post"][0...${POSTS_COUNT}]`;
+// const POSTS_COUNT = 6;
+const EVENTS_QUERY = `*[_type == "post"]`;
 const TOTAL_POSTS_QUERY = `count(*[_type == "post"])`;
 // const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]{title, slug, _id}`;
 const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]| order(sortorder asc){
