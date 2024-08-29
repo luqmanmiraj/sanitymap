@@ -117,7 +117,7 @@ export default function Page() {
                 <CategoryNav events={displayedPosts} />
                 <div className="w-full lg:w-1/3 p-2">
                     <div className="w-full h-[500px] sm:w-[436px] sm:h-[750px] rounded-[32px] overflow-hidden">
-                        <GoogleMap events={displayedPosts} updateBounds={updateBounds} />
+                        <GoogleMap events={allPosts} updateBounds={updateBounds} />
                     </div>
                 </div>
             </div>
