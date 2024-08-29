@@ -55,14 +55,38 @@ console.log(categories)
           {categories?.length === 0 && ( 
            <React.Fragment>
             <div className="flex w-[75%] justify-between">
-              <div className="bg-gray-300 animate-pulse rounded-full h-16 w-16"></div>
-              <div className="bg-gray-300 animate-pulse rounded-full h-16 w-16"></div>
-              <div className="bg-gray-300 animate-pulse rounded-full h-16 w-16"></div>
-              <div className="bg-gray-300 animate-pulse rounded-full h-16 w-16"></div>
-              <div className="bg-gray-300 animate-pulse rounded-full h-16 w-16"></div>
-              <div className="bg-gray-300 animate-pulse rounded-full h-16 w-16"></div>
-              <div className="bg-gray-300 animate-pulse rounded-full h-16 w-16"></div>
-              <div className="bg-gray-300 animate-pulse rounded-full h-16 w-16"></div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gray-300 animate-pulse rounded-full h-10 w-10"></div>
+                <div className="bg-gray-300 animate-pulse h-4 w-16 mt-2"></div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gray-300 animate-pulse rounded-full h-10 w-10"></div>
+                <div className="bg-gray-300 animate-pulse h-4 w-16 mt-2"></div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gray-300 animate-pulse rounded-full h-10 w-10"></div>
+                <div className="bg-gray-300 animate-pulse h-4 w-16 mt-2"></div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gray-300 animate-pulse rounded-full h-10 w-10"></div>
+                <div className="bg-gray-300 animate-pulse h-4 w-16 mt-2"></div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gray-300 animate-pulse rounded-full h-10 w-10"></div>
+                <div className="bg-gray-300 animate-pulse h-4 w-16 mt-2"></div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gray-300 animate-pulse rounded-full h-10 w-10"></div>
+                <div className="bg-gray-300 animate-pulse h-4 w-16 mt-2"></div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gray-300 animate-pulse rounded-full h-10 w-10"></div>
+                <div className="bg-gray-300 animate-pulse h-4 w-16 mt-2"></div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="bg-gray-300 animate-pulse rounded-full h-10 w-10"></div>
+                <div className="bg-gray-300 animate-pulse h-4 w-16 mt-2"></div>
+              </div>
             </div>
           </React.Fragment>)}
 
