@@ -22,7 +22,7 @@ export default function Seasons() {
     <div className="flex justify-center gap-8 mt-8">
       <a
         href="#"
-        className={`flex flex-col items-center ${activeSeason === 'Spring' ? 'active' : ''}`}
+        className={`flex flex-col items-center ${activeSeason === 'Spring' || activeSeason === '' ? 'active' : ''}`}
         onClick={() => handleSeasonClick('Spring')}
       >
         <svg
@@ -33,7 +33,7 @@ export default function Seasons() {
           xmlns="http://www.w3.org/2000/svg"
           className="w-10 h-10"
         >
-          <rect width="64" height="64" rx="32" fill={activeSeason === 'Spring' ? "#889D1E" : "#D3D3D3"} />
+          <rect width="64" height="64" rx="32" fill={activeSeason === 'Spring' || activeSeason === '' ? "#889D1E" : "#D3D3D3"} />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -45,7 +45,7 @@ export default function Seasons() {
       </a>
       <a
         href="#"
-        className={`flex flex-col items-center ${activeSeason === 'Summer' ? 'active' : ''}`}
+        className={`flex flex-col items-center ${activeSeason === 'Summer' || activeSeason === '' ? 'active' : ''}`}
         onClick={() => handleSeasonClick('Summer')}
       >
         <svg
@@ -56,7 +56,7 @@ export default function Seasons() {
           xmlns="http://www.w3.org/2000/svg"
           className="w-10 h-10"
         >
-          <rect width="64" height="64" rx="32" fill={activeSeason === 'Summer' ? "#FFAD29" : "#D3D3D3"} />
+          <rect width="64" height="64" rx="32" fill={activeSeason === 'Summer' || activeSeason === '' ? "#FFAD29" : "#D3D3D3"} />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -100,7 +100,7 @@ export default function Seasons() {
       </a>
       <a
         href="#"
-        className={`flex flex-col items-center ${activeSeason === 'Autumn' ? 'active' : ''}`}
+        className={`flex flex-col items-center ${activeSeason === 'Autumn' || activeSeason === '' ? 'active' : ''}`}
         onClick={() => handleSeasonClick('Autumn')}
       >
         <svg
@@ -111,7 +111,7 @@ export default function Seasons() {
           xmlns="http://www.w3.org/2000/svg"
           className="w-10 h-10"
         >
-          <rect width="64" height="64" rx="32" fill={activeSeason === 'Autumn' ? "#721931" : "#D3D3D3"} />
+          <rect width="64" height="64" rx="32" fill={activeSeason === 'Autumn' || activeSeason === '' ? "#721931" : "#D3D3D3"} />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -123,7 +123,7 @@ export default function Seasons() {
       </a>
       <a
         href="#"
-        className={`flex flex-col items-center ${activeSeason === 'Winter' ? 'active' : ''}`}
+        className={`flex flex-col items-center ${activeSeason === 'Winter' || activeSeason === '' ? 'active' : ''}`}
         onClick={() => handleSeasonClick('Winter')}
       >
         <svg
@@ -134,7 +134,7 @@ export default function Seasons() {
           xmlns="http://www.w3.org/2000/svg"
           className="w-10 h-10"
         >
-          <rect width="64" height="64" rx="32" fill={activeSeason === 'Winter' ? "#079EA5" : "#D3D3D3"} />
+          <rect width="64" height="64" rx="32" fill={activeSeason === 'Winter' || activeSeason === '' ? "#079EA5" : "#D3D3D3"} />
           <path
             fillRule="evenodd"
             clipRule="evenodd"
