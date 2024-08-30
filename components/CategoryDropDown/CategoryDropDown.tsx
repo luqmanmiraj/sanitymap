@@ -8,7 +8,6 @@ interface CategoryDropDownProps {
 }
 
 const CategoryDropDown: React.FC<CategoryDropDownProps> = ({ selectedCategories, category, handleCategoriesSelected }) => {
-  console.log("selected category", selectedCategories);
   const [selectedActivities, setSelectedActivities] = useState<string[]>([...selectedCategories]);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -47,7 +46,7 @@ const CategoryDropDown: React.FC<CategoryDropDownProps> = ({ selectedCategories,
             <label key={index} className="flex items-center">
               <input
                 type="checkbox"
-                className="mr-2"
+                className="mr-2 accent-[#079EA5]"
                 checked={selectedActivities.includes(childCategory.slug.current)}
                 onChange={() => handleCheckboxChange(childCategory.slug.current)}
               />

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef ,useEffect} from 'react';
 import Seasons from './seasons';
 import Months from '../Months/Months';
 import DatePicker from '../DatePicker/DatePicker';
@@ -44,6 +44,13 @@ const Header = ({selectedSeason, handleSeasonsSelected}) => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+  useEffect(() => {
+    if (showModal || showWhoModal || showMoreModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [showModal, showWhoModal, showMoreModal]);
 
   return (
     <>

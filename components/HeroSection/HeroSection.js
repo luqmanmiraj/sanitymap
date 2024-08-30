@@ -7,6 +7,7 @@ const HeroSection = ({ selectedCategories, categories, handleCategoriesSelected 
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const [selectedCategoryChildren, setSelectedCategoryChildren] = useState([]);
   const [fadeIn, setFadeIn] = useState(false);
+  const [filteredSelectedCategories,setFilteredSelectedCategories]=useState([]);
 
   useEffect(() => {
       // Trigger the fade-in animation after component mounts
@@ -20,36 +21,47 @@ const HeroSection = ({ selectedCategories, categories, handleCategoriesSelected 
   }, [categories]);
 
   const handleCategoryClick = (category, event) => {
-    console.log(category._id);
+    console.log(category.childCategories);
     const rect = event.target.getBoundingClientRect();
     setDropdownPosition({ top: rect.bottom, left: rect.left });
-    console.log(rect);
+    const filteredCategories = selectedCategories.filter(selectedCategory => 
+      category.childCategories.some(childCategory => childCategory.slug.current === selectedCategory)
+    );
+    setFilteredSelectedCategories(filteredCategories);
     setVisibleCategory(visibleCategory === category._id ? false : category._id);
     setSelectedCategoryChildren(category.childCategories || []);
   };
-console.log(categories)
   return (
     <section className="hero bg-cover bg-center relative" style={{ backgroundColor: '#FFFFFF', height: '122px' }}>
       <div className="overlay absolute inset-0 flex flex-col justify-center items-center text-white">
         <div className="category-icons flex overflow-x-auto whitespace-nowrap gap-1 pb-4 w-full px-4 justify-center items-center"> 
           {categories.length>0 && categories.map((category, index) => (
-            <React.Fragment key={category._id}>
+            <React.Fragment key={category._id} className="relative">
               <span 
                 id={category._id} 
                 className={`cursor-pointer hover:bg-[#079EA5] hover:text-white bg-white py-2 px-4 rounded flex flex-col items-center flex-shrink-0 ${category.slug.current} transition-opacity transform ease-in-out duration-150 ${fadeIn ? `opacity-100 ` : 'opacity-0 '} ${visibleCategory === category._id ? 'text-black ' : 'text-gray-600'}`}
                 onClick={(event) => handleCategoryClick(category, event)}
                 style={{ transitionDelay: `${(index+1 )* 50}ms` }}
               >
+                 
                 {category.description && (
                   <div dangerouslySetInnerHTML={{ __html: category.description }} />
                 )}
                 <span className={`mt-2 ${visibleCategory === category._id ? 'text-black border-b-4 border-black' : ''}`}>{category.title}</span>
+                {
+                visibleCategory === category._id && (
+                  <div className="absolute top-0 right-0 text-xs font-semibold text-white bg-black flex items-center justify-center" style={{ width: '20px', height: '20px', borderRadius: '50%' }}>
+                    {filteredSelectedCategories.length}
+                  </div>
+                )
+              }
               </span>
               {visibleCategory === category._id && (
                 <div style={{ position: 'fixed', top: dropdownPosition.top, left: dropdownPosition.left, zIndex: 9999, color: 'black' }}>
                   <CategoryDropDown selectedCategories={selectedCategories} category={category} handleCategoriesSelected={handleCategoriesSelected} />
                 </div>
               )}
+            
             </React.Fragment>
           ))}
           {categories?.length === 0 && ( 
