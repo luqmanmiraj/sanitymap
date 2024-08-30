@@ -16,6 +16,10 @@ const Preferences: React.FC = () => {
     window.history.pushState({}, '', url.toString());
   };
 
+  const handleUpdateSorting = () => {
+    console.log('update sorting');
+  };
+
   useEffect(() => {
     const url = new URL(window.location.href);
     const explorerTypesFromUrl = url.searchParams.get('explorerTypes')?.split(',') || [];
@@ -61,19 +65,19 @@ const Preferences: React.FC = () => {
     setAccessibility([]);
     setLanguages([]);
   };
-
   return (
-    <div className="p-6 bg-white rounded-lg max-w-lg mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Preferences</h2>
-      
+    <div className=" bg-white rounded-lg px-2 overflow-y-auto max-h-[65vh]">
+      <div className='sticky top-0 left-0 w-1/2 bg-white'>
+      <h2 className="text-2xl text-black font-bold mb-4">Preferences</h2>
+      </div>
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Explorer Type</h3>
-        <div className="grid grid-cols-2 gap-2">
+        <h3 className="text-xl text-black font-semibold mb-2">Explorer Type</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 text-black gap-2">
           {['Foodie', 'Adventurer', 'Family Focused', 'Outdoorsy', '2SLGBTQIA+', 'Romantic', 'Arts & Culture Fan', 'Business Traveller', 'Hipster', 'Luxury Traveller', 'Accessible Traveller', 'Cruise Traveller', 'Eco-Conscious', 'Pet Owner', 'Day Tripper'].map(type => (
             <label key={type} className="flex items-center">
               <input
                 type="checkbox"
-                className="mr-2"
+                className="mr-2 accent-[#079EA5]"
                 checked={explorerTypes.includes(type)}
                 onChange={() => handleCheckboxChange(setExplorerTypes, type)}
               />
@@ -82,33 +86,42 @@ const Preferences: React.FC = () => {
           ))}
         </div>
       </div>
-
+      <div className="border-t border-gray-300 my-4"></div>
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Budget</h3>
-        <div className="flex space-x-4">
-          {['Free', 'Low-cost', 'Medium', 'High'].map(option => (
-            <label key={option} className="flex items-center">
+        <h3 className="text-xl text-black font-semibold mb-2">Budget</h3>
+        <div className="flex items-center text-black bg-gray-200 rounded-full cursor-pointer">
+          {['Free', 'Low-cost', 'Medium', 'High'].map((option, index) => (
+            <label key={option} className={`flex items-center justify-center  flex-grow ${
+              ['Free', 'Low-cost', 'Medium', 'High'].indexOf(option) <= ['Free', 'Low-cost', 'Medium', 'High'].indexOf(budget)
+               ? 'bg-[#079EA5] text-white' : 'bg-gray-200 text-black'} p-2  ${index === 3 ? 'rounded-r-full' : ''} ${index === 0 ? 'rounded-l-full' : ''} ${option === budget ? 'rounded-r-full' : ''}`}>
               <input
                 type="radio"
-                className="mr-2"
+                className="hidden"
                 value={option}
                 checked={budget === option}
                 onChange={handleBudgetChange}
               />
-              {option}
+              <span className="flex items-center cursor-pointer">
+                {option === 'Free' && <span className="mr-2">-</span>}
+                {option === 'Low-cost' && <span className="mr-2">💰</span>}
+                {option === 'Medium' && <span className="mr-2">📷</span>}
+                {option === 'High' && <span className="mr-2">💎</span>}
+                {option}
+              </span>
             </label>
           ))}
         </div>
       </div>
+      <div className="border-t border-gray-300 my-4"></div>
 
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Accessibility</h3>
-        <div className="grid grid-cols-2 gap-2">
+        <h3 className="text-xl text-black font-semibold mb-2">Accessibility</h3>
+        <div className="grid grid-cols-3 text-black gap-2">
           {['Wheelchair accessible', 'Accessible parking', 'Accessible washroom', 'Braille signage', 'Assistive listening devices'].map(option => (
             <label key={option} className="flex items-center">
               <input
                 type="checkbox"
-                className="mr-2"
+                className="mr-2 accent-[#079EA5]"
                 checked={accessibility.includes(option)}
                 onChange={() => handleCheckboxChange(setAccessibility, option)}
               />
@@ -117,15 +130,16 @@ const Preferences: React.FC = () => {
           ))}
         </div>
       </div>
+      <div className="border-t border-gray-300 my-4"></div>
 
       <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Language offered</h3>
-        <div className="grid grid-cols-2 gap-2">
+        <h3 className="text-xl text-black font-semibold mb-2">Language offered</h3>
+        <div className="grid grid-cols-3 text-black gap-2">
           {['English', 'Spanish', 'Mandarin', 'French', 'Cantonese'].map(language => (
             <label key={language} className="flex items-center">
               <input
                 type="checkbox"
-                className="mr-2"
+                className="mr-2 accent-[#079EA5]"
                 checked={languages.includes(language)}
                 onChange={() => handleCheckboxChange(setLanguages, language)}
               />
@@ -134,10 +148,12 @@ const Preferences: React.FC = () => {
           ))}
         </div>
       </div>
-
-      <div className="flex space-x-4">
-        <button onClick={handleClearAll} className="px-4 py-2 bg-gray-300 rounded">Clear all</button>
-        <button className="px-4 py-2 bg-black text-white rounded">Update Sorting</button>
+      <div className='sticky bottom-0 left-0 bg-white w-full'>
+      <div className="border-t border-gray-300 my-4"></div>
+      <div className="flex text-black justify-between">
+        <button onClick={handleClearAll} className="px-4 py-2 font-bold rounded">Clear all</button>
+        <button onClick={handleUpdateSorting} className="px-4 py-2 bg-black text-white rounded">Update Sorting</button>
+      </div>
       </div>
     </div>
   );
