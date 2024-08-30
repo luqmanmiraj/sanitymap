@@ -11,9 +11,9 @@ const categories = [
 ];
 
 const CategoryNav = ({ events }) => (
-    <div className="w-full lg:w-2/3 p-4">
+    <div className="w-full  p-4">
    {/*    <div className="text-left mb-6 font-semibold text-black">584 results</div> */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
         {events.map((event, index) => (
           <div key={index} className="category flex flex-col items-start cursor-pointer transition-colors duration-200 relative">
             <div className="w-full h-[250px] mb-4 relative">

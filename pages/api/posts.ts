@@ -6,7 +6,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const EVENTS_QUERY = (page: number, limit: number, categories: string[], bounds: { south: number, west: number, north: number, east: number }) => {
     const categoryFilter = categories.length > 0 ? `&& count((categories[]->slug.current)[@ in [${categories.map(cat => `"${cat}"`).join(', ')}]]) > 0` : '';
     const boundsFilter = bounds ? `&& location.lat >= ${bounds.south} && location.lat <= ${bounds.north} && location.lng >= ${bounds.west} && location.lng <= ${bounds.east}` : '';
-    const query = `*[_type == "post" ${categoryFilter} ${boundsFilter}]`;
+    const query = `*[_type == "post" ${categoryFilter} ${boundsFilter}]{
+      ...,
+      "categoryDetail": categories[]->{
+        title,
+        slug,
+        _id,
+        description
+      }
+    }`;
     return query;
   };
   const TOTAL_POSTS_QUERY = (categories: string[], bounds: { south: number, west: number, north: number, east: number }) => {

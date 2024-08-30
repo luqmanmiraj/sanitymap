@@ -30,11 +30,11 @@ const Months: React.FC = () => {
     };
 
     return (
-        <div className="grid grid-cols-4 gap-4 justify-items-center items-center">
+        <div className="grid grid-cols-4 gap-2 justify-items-center items-center mt-10 mx-10">
             {months.map((month: string, index: number) => (
                 <div
                     key={month}
-                    className={`p-4 text-center text-black cursor-pointer rounded-full transition-colors duration-300 ${
+                    className={`p-5 text-center text-black cursor-pointer rounded-full transition-colors duration-300 ${
                         selectedMonth === index ? 'bg-black text-white' : 'bg-transparent'
                     }`}
                     onClick={() => handleMonthClick(index)}

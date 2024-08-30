@@ -31,7 +31,7 @@ export default function Seasons() {
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-10 h-10"
+          className="w-14 h-14"
         >
           <rect width="64" height="64" rx="32" fill={activeSeason === 'Spring' || activeSeason === '' ? "#889D1E" : "#D3D3D3"} />
           <path
@@ -54,7 +54,7 @@ export default function Seasons() {
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-10 h-10"
+          className="w-14 h-14"
         >
           <rect width="64" height="64" rx="32" fill={activeSeason === 'Summer' || activeSeason === '' ? "#FFAD29" : "#D3D3D3"} />
           <path
@@ -109,7 +109,7 @@ export default function Seasons() {
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-10 h-10"
+          className="w-14 h-14"
         >
           <rect width="64" height="64" rx="32" fill={activeSeason === 'Autumn' || activeSeason === '' ? "#721931" : "#D3D3D3"} />
           <path
@@ -132,7 +132,7 @@ export default function Seasons() {
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-10 h-10"
+          className="w-14 h-14"
         >
           <rect width="64" height="64" rx="32" fill={activeSeason === 'Winter' || activeSeason === '' ? "#079EA5" : "#D3D3D3"} />
           <path
