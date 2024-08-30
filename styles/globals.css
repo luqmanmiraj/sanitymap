@@ -15,7 +15,7 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-html {
+body {
   width: 100vw;
   overflow-x: hidden;
 }
