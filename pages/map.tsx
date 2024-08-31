@@ -110,13 +110,13 @@ export default function Page() {
     }, []); 
 
     return (
-        <div className="home-page" style={{ backgroundColor: '#f8f8f8', padding: '30px' }}>
+        <div className="home-page " style={{ backgroundColor: '#f8f8f8', padding: '30px' }}>
             <Header selectedSeason={selectedSeason} handleSeasonsSelected={handleSeasonsSelected} />
             <HeroSection selectedCategories={Array.from(selectedCategories)} categories={data.categories} handleCategoriesSelected={handleCategoriesSelected} />
-            <div className="flex flex-col lg:flex-row w-full" style={{ backgroundColor: '#FFFFFF' }}>
+            <div className="w-[100%] sm:flex flex-row" style={{ backgroundColor: '#FFFFFF' }}>
                 <CategoryNav events={displayedPosts} />
-                <div className="w-full lg:w-1/3 p-2">
-                    <div className="w-full h-[500px] sm:w-[436px] sm:h-[750px] rounded-[32px] overflow-hidden">
+                <div className=" p-2">
+                    <div className="w-full h-[500px] lg:w-[450px] md:w-[300px] sm:w-[250px] sm:h-[750px] rounded-[32px] overflow-hidden">
                         <GoogleMap events={allPosts} updateBounds={updateBounds} />
                     </div>
                 </div>

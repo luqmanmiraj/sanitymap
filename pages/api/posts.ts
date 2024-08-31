@@ -8,12 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const boundsFilter = bounds ? `&& location.lat >= ${bounds.south} && location.lat <= ${bounds.north} && location.lng >= ${bounds.west} && location.lng <= ${bounds.east}` : '';
     const query = `*[_type == "post" ${categoryFilter} ${boundsFilter}]{
       ...,
-      "categoryDetail": categories[]->{
-        title,
-        slug,
-        _id,
-        description
-      }
+      "categoryDetail": categories[]->{ ..., "parentCategory": parentCategory-> }
     }`;
     return query;
   };
