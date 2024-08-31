@@ -10,6 +10,7 @@ const HeroSection = ({ selectedCategories, categories, handleCategoriesSelected 
   const [filteredSelectedCategories, setFilteredSelectedCategories] = useState([]);
   const [searchActive, setSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [cat,setCat]=useState({});
 
   useEffect(() => {
     // Trigger the fade-in animation after component mounts
@@ -22,16 +23,22 @@ const HeroSection = ({ selectedCategories, categories, handleCategoriesSelected 
     }
   }, [categories]);
 
+  useEffect(() => {
+    if(cat?.childCategories){
+      const filteredCategories = selectedCategories.filter(selectedCategory =>
+        cat.childCategories.some(childCategory => childCategory.slug.current === selectedCategory)
+      );
+      setFilteredSelectedCategories(filteredCategories);
+    }
+  }, [selectedCategories,cat]);
+
   const handleCategoryClick = (category, event) => {
     console.log(category.childCategories);
     const rect = event.target.getBoundingClientRect();
     setDropdownPosition({ top: rect.bottom, left: rect.left });
-    const filteredCategories = selectedCategories.filter(selectedCategory =>
-      category.childCategories.some(childCategory => childCategory.slug.current === selectedCategory)
-    );
-    setFilteredSelectedCategories(filteredCategories);
     setVisibleCategory(visibleCategory === category._id ? false : category._id);
     setSelectedCategoryChildren(category.childCategories || []);
+    setCat(category);
   };
 
   const handleSearchIconClick = () => {
