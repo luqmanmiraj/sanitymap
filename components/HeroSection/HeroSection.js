@@ -66,7 +66,7 @@ const HeroSection = ({ selectedCategories, categories, handleCategoriesSelected 
                 )}
                 <span className={`mt-2 ${visibleCategory === category._id ? 'text-black border-b-4 border-black' : ''}`}>{category.title}</span>
                 {
-                  visibleCategory === category._id && (
+                  filteredSelectedCategories.length > 0 && visibleCategory === category._id && (
                     <div className="absolute top-0 right-0 text-xs font-semibold text-white bg-black flex items-center justify-center" style={{ width: '20px', height: '20px', borderRadius: '50%' }}>
                       {filteredSelectedCategories.length}
                     </div>

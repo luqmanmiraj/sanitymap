@@ -16,6 +16,14 @@
 }
 
 @font-face {
+    font-family: Nohemi bold;
+    src: url('Nohemi-ExtraBold-BF6438cc5881baf.ttf'),
+    url('Nohemi-ExtraBold-BF6438cc5761ae2.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'proxima_nova_altbold';
     src: url('Proxima Nova Alt Bold-webfont.eot');
     src: url('Proxima Nova Alt Bold-webfont.eot?#iefix') format('embedded-opentype'),

@@ -126,7 +126,6 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
   };
 
 
-  console.log(selectedEvent);
   return (
     <LoadScript googleMapsApiKey="AIzaSyBXV0elgfYX_C0zJCVkrHpQXLQdxIa5t_0">
       <GoogleMapComponent
@@ -312,7 +311,6 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
 
           onLoad={
             (marker) => {
-              console.log(marker);
               marker.setIcon(getMarkerIcon('#F77E2D'));
               google.maps.event.addListener(marker, 'mouseover', function () {
                 marker.setIcon(getMarkerIcon('#721931'));
@@ -373,17 +371,23 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
                 position={{ lat: event.location.lat, lng: event.location.lng }}
                 clusterer={clusterer}
                 icon={{
-                  url: `data:image/svg+xml;charset=UTF-8,<svg width="26" height="26" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="13" cy="13" r="13" fill="%23889D1E" />
+                  url: `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="20" cy="20" r="20" fill="%23889D1E" />
           ${encodeURIComponent(event?.categoryDetail?.length > 0
                     ? event?.categoryDetail[0]?.parentCategory?.description
-                      ? event?.categoryDetail[0]?.parentCategory?.description.replace(
+                      ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
                         'currentColor',
                         'white'
+                      ).replaceAll(
+                        'height=',
+                        'x="8" y="8" height='
                       )
-                      : event?.categoryDetail[0]?.description.replace(
+                      : event?.categoryDetail[0]?.description.replaceAll(
                         'currentColor',
                         'white'
+                      ).replaceAll(
+                        'height=',
+                        'x="8" y="8" height='
                       )
                     : '')}
           </svg>`,
@@ -391,21 +395,26 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
                 onClick={() => setSelectedEvent(event)}
                 onLoad={(marker) => {
 
-                console.log(event);
                   if (!marker.get('iconModified')) {
                     const iconElement = marker.getIcon();
                     if (iconElement) {
-                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="26" height="26" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="13" cy="13" r="13" fill="%23889D1E" />
+                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="20" fill="%23889D1E" />
               ${encodeURIComponent(event?.categoryDetail?.length > 0
                         ? event?.categoryDetail[0]?.parentCategory?.description
                           ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
                             'currentColor',
                             'white'
+                          ).replaceAll(
+                            'height=',
+                            'x="8" y="8" height='
                           )
                           : event?.categoryDetail[0]?.description.replaceAll(
                             'currentColor',
                             'white'
+                          ).replaceAll(
+                            'height=',
+                            'x="8" y="8" height='
                           )
                         : '')}
             </svg>`;
@@ -417,17 +426,23 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
                   google.maps.event.addListener(marker, 'mouseover', function () {
                     const iconElement = marker.getIcon();
                     if (iconElement) {
-                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="26" height="26" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="13" cy="13" r="13" fill="%234B612C" />
+                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="20" fill="%234B612C" />
             ${encodeURIComponent(event?.categoryDetail?.length > 0
                         ? event?.categoryDetail[0]?.parentCategory?.description
                           ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
                             'currentColor',
                             'white'
+                          ).replaceAll(
+                            'height=',
+                            'x="8" y="8" height='
                           )
                           : event?.categoryDetail[0]?.description.replaceAll(
                             'currentColor',
                             'white'
+                          ).replaceAll(
+                            'height=',
+                            'x="8" y="8" height='
                           )
                         : '')}
           </svg>`;
@@ -438,17 +453,23 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
                   google.maps.event.addListener(marker, 'mouseout', function () {
                     const iconElement = marker.getIcon();
                     if (iconElement) {
-                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="26" height="26" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="13" cy="13" r="13" fill="%23889D1E" />
+                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                                          <circle cx="20" cy="20" r="20" fill="%23889D1E" />
                                           ${encodeURIComponent(event?.categoryDetail?.length > 0
                         ? event?.categoryDetail[0]?.parentCategory?.description
                           ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
                             'currentColor',
                             'white'
+                          ).replaceAll(
+                            'height=',
+                            'x="8" y="8" height='
                           )
                           : event?.categoryDetail[0]?.description.replaceAll(
                             'currentColor',
                             'white'
+                          ).replaceAll(
+                            'height=',
+                            'x="8" y="8" height='
                           )
                         : '')}
                           </svg>`;
@@ -460,17 +481,23 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
                     setInfoWindowOpen(true);
                     const iconElement = marker.getIcon();
                     if (iconElement) {
-                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="26" height="26" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="13" cy="13" r="13" fill="black" />
+                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="20" fill="black" />
           ${encodeURIComponent(event?.categoryDetail?.length > 0
                         ? event?.categoryDetail[0]?.parentCategory?.description
                           ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
                             'currentColor',
                             'white'
+                          ).replaceAll(
+                            'height=',
+                            'x="8" y="8" height='
                           )
                           : event?.categoryDetail[0]?.description.replaceAll(
                             'currentColor',
                             'white'
+                          ).replaceAll(
+                            'height=',
+                            'x="8" y="8" height='
                           )
                         : '')}
         </svg>`;

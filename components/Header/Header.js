@@ -57,7 +57,7 @@ const Header = ({selectedSeason, handleSeasonsSelected}) => {
       <header className="relative w-full h-[306px] bg-cover bg-center rounded-[30px] sm:h-60" style={{ backgroundImage: `url('/images/map-main.jpg')`, backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-black bg-opacity-50 rounded-[30px]">
           <div className="container mx-auto h-full flex flex-col justify-center items-center px-4 py-6">
-            <h1 className="text-white text-3xl sm:text-5xl md:text-7xl font-bold text-center font-sans">Personalize your experience</h1>
+            <h1 className="text-white text-3xl sm:text-5xl md:text-7xl font-bold text-center" style={{ fontFamily: 'Nohemi bold' }}>Personalize your experience</h1>
             <nav className="flex flex-col justify-center items-center w-full max-w-md">
               <div className="bg-[#A3A3A34D] bg-opacity-30 backdrop-blur-md rounded-full flex justify-center w-full max-w-[386px] h-[70px] mt-[30px] sm:h-[60px] border border-[#BDBDBD66] p-2 sm:p-1">
                 <button ref={buttonRef} onClick={toggleModal} className={` px-4 flex-grow font-['Proxima Nova'] text-[18px] sm:text-[14px] lg:text-[20px] leading-[18px] text-center flex items-center justify-center hover:bg-opacity-50  rounded-full h-full ${showModal===true? ' outline-none bg-white focus:bg-white focus:text-black focus:outline-none text-black' : 'text-white'}`}>When</button>
