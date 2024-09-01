@@ -9,8 +9,10 @@ import {languagesType} from './languagesType'
 import {explorerType} from './explorerType'
 import {accessibilityType} from './accessibilityType'
 import {participantType} from './participantType'
+import {cuisineType} from './cuisineType'
+import {cravingType} from './cravingType'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [blockContentType, categoryType, postType, authorType, seasonType, languagesType, explorerType, accessibilityType, participantType],
+  types: [blockContentType, categoryType, postType, authorType, seasonType, languagesType, explorerType, accessibilityType, participantType, cuisineType, cravingType],
 }
 

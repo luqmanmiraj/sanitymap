@@ -56,6 +56,18 @@ export const postType = defineType({
       of: [defineArrayMember({type: 'reference', to: {type: 'season'}})],
     }),
     defineField({
+      name: 'cuisines',
+      type: 'array',
+      of: [defineArrayMember({type: 'reference', to: {type: 'cuisine'}})],
+      title: 'Cuisines',
+    }),
+    defineField({
+      name: 'cravings',
+      type: 'array',
+      of: [defineArrayMember({type: 'reference', to: {type: 'craving'}})],
+      title: 'Cravings',
+    }),
+    defineField({
       name: 'budget',
       type: 'string',
       options: {

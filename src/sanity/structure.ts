@@ -9,7 +9,7 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('author').title('Authors'),
       S.divider(),
       ...S.documentTypeListItems().filter(
-        (item) => item.getId() && !['post', 'category', 'author'].includes(item.getId()!),
+        (item) => item.getId() && !['post', 'category', 'author', 'cuisine', 'craving'].includes(item.getId()!),
       ),
       S.listItem()
         .title('Categories')
@@ -30,4 +30,6 @@ export const structure: StructureResolver = (S) =>
             .title('Categories')
             // .order([{ field: 'title', direction: 'asc' }]) // Sort categories by title in ascending order
         ),
+      S.documentTypeListItem('cuisine').title('Cuisines'),
+      S.documentTypeListItem('craving').title('Cravings'),
     ])
