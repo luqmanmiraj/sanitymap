@@ -97,6 +97,11 @@ export const postType = defineType({
       type: 'geopoint',
       title: 'Location',
     }),
+    defineField({
+      name: 'address',
+      type: 'string',
+      title: 'Address',
+    }),
   ],
   preview: {
     select: {
