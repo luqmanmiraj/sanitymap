@@ -67,3 +67,19 @@ body {
   border-radius: 9999px; 
   background: #77787C; 
 }
+
+
+.gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+.gm-style-iw-chr {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.gm-style-iw{
+  padding-left: 0 !important;
+}

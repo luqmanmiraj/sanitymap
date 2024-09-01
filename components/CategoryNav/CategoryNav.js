@@ -17,7 +17,7 @@ const CategoryNav = ({ events }) => (
         {events.map((event, index) => (
           <div key={index} className="category flex flex-col items-start cursor-pointer transition-colors duration-200 relative">
             <div className="w-full h-[250px] mb-4 relative">
-              <img src={event.image ? event.image : 'https://via.placeholder.com/2070x1380'} alt={event.title} className="w-full h-full object-cover rounded-xl" />
+              <img src={event.imageUrl ? event.imageUrl : 'https://via.placeholder.com/2070x1380'} alt={event.title} className="w-full h-full object-cover rounded-xl" loading="lazy" />
               <div className="absolute top-2 right-2 bg-[#079EA5] text-[#FFFFFF] rounded-full px-3 py-1 text-xs font-semibold text-black" style={{ width: '103px', height: '32px', padding: '8px 12px', gap: '4px', borderRadius: '99px' }}>
                 {/* {category.match} Match */}
               </div>
@@ -29,7 +29,6 @@ const CategoryNav = ({ events }) => (
         ))}
       </div>
     </div>
-  
-);
+);  
 
 export default CategoryNav;

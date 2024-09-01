@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sanityAllPosts } from '../../src/sanity/lib/client';
 // const POSTS_COUNT = 6;
-const EVENTS_QUERY = `*[_type == "post"]`;
+const EVENTS_QUERY = `*[_type == "post"]{
+  ...,
+  "imageUrl": mainImage.asset->url
+}`;
 const TOTAL_POSTS_QUERY = `count(*[_type == "post"])`;
 // const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]{title, slug, _id}`;
 const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]| order(sortorder asc){
@@ -10,7 +13,7 @@ const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || 
     ...
   }
 }`;
-const ACCESSIBILITY_QUERY = `*[_type == "accessibility"]{title, _id}`;
+const ACCESSIBILITY_QUERY = `*[_type == "accessibility"]{title, _id}`;  
 const LANGUAGES_QUERY = `*[_type == "language"]{title, _id}`;
 const EXPLORERS_QUERY = `*[_type == "explorer"]{title, _id}`;
 const PARTICIPANT_QUERY = `*[_type == "participant"]{title, _id}`;

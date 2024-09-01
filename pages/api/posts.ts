@@ -8,7 +8,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const boundsFilter = bounds ? `&& location.lat >= ${bounds.south} && location.lat <= ${bounds.north} && location.lng >= ${bounds.west} && location.lng <= ${bounds.east}` : '';
     const query = `*[_type == "post" ${categoryFilter} ${boundsFilter}]{
       ...,
-      "categoryDetail": categories[]->{ ..., "parentCategory": parentCategory-> }
+      "categoryDetail": categories[]->{ ..., "parentCategory": parentCategory-> },
+      "imageUrl": mainImage.asset->url
     }`;
     return query;
   };
