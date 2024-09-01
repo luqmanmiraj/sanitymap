@@ -32,6 +32,7 @@ export default function Page() {
     const [bounds, setBounds] = useState<google.maps.LatLngBounds | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
+    const [loading, setLoading] = useState(true);
 
     const updateBounds = (newBounds: google.maps.LatLngBounds) => {
         setBounds(newBounds);
@@ -68,15 +69,18 @@ export default function Page() {
 
     const fetchEvents = useCallback(async () => {
         try {
+            // setLoading(true);
             const url = new URL(window.location.href);
             window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
             const response = await fetch(`/api/posts?${url.searchParams.toString()}`);
             const data = await response.json();
-            setAllPosts(data.posts);
             setDisplayedPosts(data.posts.slice(0, POSTS_PER_PAGE));
+            setAllPosts(data.posts);
             setTotalPosts(data.totalPosts);
         } catch (error) {
             console.error('Failed to fetch events:', error);
+        } finally {
+            console.log('fetchEvents',data)
         }
     }, []);
 
@@ -92,17 +96,21 @@ export default function Page() {
                 setCurrentPage(parseInt(pageFromUrl));
             }
             try {
+                setLoading(true);
                 const url = new URL(window.location.href);
                 window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
                 const response = await fetch(`/api/data?${url.searchParams.toString()}`);
                 const data = await response.json();
                 console.log(data);
-                setAllPosts(data.posts);
                 setDisplayedPosts(data.posts.slice(0, POSTS_PER_PAGE));
+                setAllPosts(data.posts);
                 setData({ categories: data.categories });
                 setTotalPosts(data.totalPosts);
             } catch (error) {
                 console.error('Failed to fetch events:', error);
+            } finally {
+                console.log('fetchData',data)
+                setLoading(false);
             }
         };
 
@@ -114,7 +122,7 @@ export default function Page() {
             <Header selectedSeason={selectedSeason} handleSeasonsSelected={handleSeasonsSelected} />
             <HeroSection selectedCategories={Array.from(selectedCategories)} categories={data.categories} handleCategoriesSelected={handleCategoriesSelected} />
             <div className="w-[100%] sm:flex flex-row" style={{ backgroundColor: '#FFFFFF' }}>
-                <CategoryNav events={displayedPosts} />
+                <CategoryNav events={displayedPosts} loading={loading} />
                 <div className=" p-2">
                     <div className="w-full h-[500px] lg:w-[450px] md:w-[300px] sm:w-[250px] sm:h-[750px] rounded-[32px] overflow-hidden">
                         <GoogleMap events={allPosts} updateBounds={updateBounds} />
