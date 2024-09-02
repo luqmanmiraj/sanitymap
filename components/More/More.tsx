@@ -122,7 +122,21 @@ const Preferences: React.FC = () => {
               </span>
             </label>
           ))}
+          
         </div>
+        <div className="flex items-center text-black bg-transparent rounded-full cursor-pointer">
+          {['Free', 'Low-cost', 'Medium', 'High'].map((option, index) => (  
+            <label key={option} className={`flex flex-col items-center justify-center  flex-grow  p-2 ${index === 3 ? 'rounded-r-full' : ''} ${index === 0 ? 'rounded-l-full' : ''} ${option === budget ? 'rounded-r-full' : ''}`}>
+              
+              <span className="flex items-center cursor-pointer">
+                {option}
+              </span>
+            </label>
+          ))}
+          
+        </div>
+  
+      
       </div>
       <div className="border-t border-gray-300 my-4"></div>
 

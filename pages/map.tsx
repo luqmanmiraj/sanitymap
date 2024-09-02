@@ -109,8 +109,10 @@ export default function Page() {
                 window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
                 const response = await fetch(`/api/data?${url.searchParams.toString()}`);
                 const data = await response.json();
-                setDisplayedPosts(data.posts.slice(0, POSTS_PER_PAGE));
-                setAllPosts(data.posts);
+                const sortedPosts = data.posts.sort((a: any, b: any) => calculateMatchPercentage(b, urlParams.get('budget'),urlParams.get('explorerTypes')?.split(','),urlParams.get('languages')?.split(','),urlParams.get('accessibility')?.split(','))-calculateMatchPercentage(a, urlParams.get('budget'),urlParams.get('explorerTypes')?.split(','),urlParams.get('languages')?.split(','),urlParams.get('accessibility')?.split(',')));
+                console.log(sortedPosts);
+                setDisplayedPosts(sortedPosts.slice(0, POSTS_PER_PAGE));
+                setAllPosts(sortedPosts);
                 setData({ categories: data.categories });
                 setTotalPosts(data.totalPosts);
             } catch (error) {
@@ -123,6 +125,62 @@ export default function Page() {
 
         fetchData();
     }, []);
+
+
+    const calculateMatchPercentage = (event, budget = '', explorerTypes = [], languages = [], accessibility = []) => {
+        let totalCriteria = 0;
+        let matchedCriteria = 0;
+        // Convert comma-separated strings to arrays
+        const explorerTypesArray = explorerTypes
+        const languagesArray = languages
+        const accessibilityArray = accessibility
+    
+        // Count the number of criteria types provided
+        const criteriaTypes = [budget, explorerTypesArray.length > 0, languagesArray.length > 0, accessibilityArray.length > 0];
+        const totalTypes = criteriaTypes.filter(Boolean).length;
+    
+        // Check budget
+        if (budget) {
+          totalCriteria++;
+          if (event.budget?.toLocaleLowerCase() === budget.toLocaleLowerCase()) {
+            matchedCriteria++;
+          }
+        }
+        console.log(event.Explorer, explorerTypes);
+        // Check explorerTypes
+        if (explorerTypesArray.length > 0) {
+          totalCriteria++;
+          const eventExplorerTypes = event.Explorer || [];
+          const explorerTypesMatch = explorerTypesArray.every(type => eventExplorerTypes.includes(type));
+          if (explorerTypesMatch) {
+            matchedCriteria++;
+          }
+        }
+    
+        // Check languages  
+        if (languagesArray.length > 0) {
+          totalCriteria++;
+          const eventLanguages = event.Language || [];
+          const languagesMatch = languagesArray.every(lang => eventLanguages.includes(lang));
+          if (languagesMatch) {
+            matchedCriteria++;
+          }
+        }
+    
+        // Check accessibility
+        if (accessibilityArray.length > 0) {
+          totalCriteria++;
+          const eventAccessibility = event.Accessibility || [];
+          const accessibilityMatch = accessibilityArray.every(acc => eventAccessibility.includes(acc));
+          if (accessibilityMatch) {
+            matchedCriteria++;
+          }
+        }
+    
+        // Calculate the match percentage
+        const percentage = totalTypes > 0 ? (matchedCriteria / totalTypes) * 100 : 0;
+        return Math.round(percentage);
+    };
 
     return (
         <div className="home-page " style={{ backgroundColor: 'white', padding: '30px' }}>

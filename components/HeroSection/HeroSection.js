@@ -63,7 +63,7 @@ const HeroSection = ({ selectedCategories, categories, handleCategoriesSelected 
               >
                 {category.description && (
                   <div dangerouslySetInnerHTML={{ __html: category.description }} />
-                )}
+                )}  
                 <span className={`mt-2  font-bold ${visibleCategory === category._id ? 'text-black border-b-4 border-black' : ''}`}>{category.title}</span>
                 {
                   filteredSelectedCategories.length > 0 && visibleCategory === category._id && (
