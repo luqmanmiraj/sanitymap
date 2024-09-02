@@ -41,7 +41,7 @@ export default function Seasons() {
             fill="white"
           />
         </svg>
-        <span className="text-black">Spring</span>
+        <span className="text-black font-500">Spring</span>
       </a>
       <a
         href="#"

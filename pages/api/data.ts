@@ -3,7 +3,12 @@ import { sanityAllPosts } from '../../src/sanity/lib/client';
 // const POSTS_COUNT = 6;
 const EVENTS_QUERY = `*[_type == "post"]{
   ...,
-  "imageUrl": mainImage.asset->url
+  "imageUrl": mainImage.asset->url,
+      "Explorer": explorer[]->title,
+      "Accessibility": accessibility[]->title,
+      "Language": language[]->title,
+      "Cuisine": cuisine[]->title,
+      "Cravings": cravings[]->title,
 }`;
 const TOTAL_POSTS_QUERY = `count(*[_type == "post"])`;
 // const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]{title, slug, _id}`;

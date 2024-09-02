@@ -33,6 +33,10 @@ export default function Page() {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
     const [loading, setLoading] = useState(true);
+    const [budget, setBudget] = useState<string | null>(null);
+    const [explorerTypes, setExplorerTypes] = useState<string | null>(null);
+    const [languages, setLanguages] = useState<string | null>(null);
+    const [accessibility, setAccessibility] = useState<string | null>(null);
 
     const updateBounds = (newBounds: google.maps.LatLngBounds) => {
         setBounds(newBounds);
@@ -80,7 +84,7 @@ export default function Page() {
         } catch (error) {
             console.error('Failed to fetch events:', error);
         } finally {
-            console.log('fetchEvents',data)
+            console.log('fetchEvents', data)
         }
     }, []);
 
@@ -89,6 +93,10 @@ export default function Page() {
             const urlParams = new URLSearchParams(window.location.search);
             const pageFromUrl = urlParams.get('page');
             const categoriesFromUrl = urlParams.get('categories');
+            setBudget(urlParams.get('budget'));
+            setExplorerTypes(urlParams.get('explorerTypes'));
+            setLanguages(urlParams.get('languages'));
+            setAccessibility(urlParams.get('accessibility'));
             if (categoriesFromUrl) {
                 setSelectedCategories(new Set(categoriesFromUrl.split(',')));
             }
@@ -101,7 +109,6 @@ export default function Page() {
                 window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
                 const response = await fetch(`/api/data?${url.searchParams.toString()}`);
                 const data = await response.json();
-                console.log(data);
                 setDisplayedPosts(data.posts.slice(0, POSTS_PER_PAGE));
                 setAllPosts(data.posts);
                 setData({ categories: data.categories });
@@ -109,20 +116,32 @@ export default function Page() {
             } catch (error) {
                 console.error('Failed to fetch events:', error);
             } finally {
-                console.log('fetchData',data)
+                console.log('fetchData', data)
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, []); 
+    }, []);
 
     return (
-        <div className="home-page " style={{ backgroundColor: '#f8f8f8', padding: '30px' }}>
+        <div className="home-page " style={{ backgroundColor: 'white', padding: '30px' }}>
             <Header selectedSeason={selectedSeason} handleSeasonsSelected={handleSeasonsSelected} />
             <HeroSection selectedCategories={Array.from(selectedCategories)} categories={data.categories} handleCategoriesSelected={handleCategoriesSelected} />
+            {allPosts.length > 0 &&
+                <p className="text-gray-500 m-4 text-black">
+                    {allPosts.length} results
+                </p>
+            }
             <div className="w-[100%] sm:flex flex-row" style={{ backgroundColor: '#FFFFFF' }}>
-                <CategoryNav events={displayedPosts} loading={loading} />
+                <CategoryNav 
+                    events={displayedPosts} 
+                    loading={loading} 
+                    budget={budget}
+                    explorerTypes={explorerTypes?.split(',')||[]}
+                    languages={languages?.split(',')||[]}
+                    accessibility={accessibility?.split(',')||[]}
+                />
                 <div className=" p-2">
                     <div className="w-full h-[500px] lg:w-[450px] md:w-[300px] sm:w-[250px] sm:h-[750px] rounded-[32px] overflow-hidden">
                         <GoogleMap events={allPosts} updateBounds={updateBounds} />

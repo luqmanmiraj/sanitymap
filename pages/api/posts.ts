@@ -9,7 +9,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const query = `*[_type == "post" ${categoryFilter} ${boundsFilter}]{
       ...,
       "categoryDetail": categories[]->{ ..., "parentCategory": parentCategory-> },
-      "imageUrl": mainImage.asset->url
+      "imageUrl": mainImage.asset->url,
+      "Explorer": explorer[]->title,
+      "Accessibility": accessibility[]->title,
+      "Language": language[]->title,
+      "Cuisine": cuisine[]->title,
+      "Cravings": cravings[]->title,
     }`;
     return query;
   };
