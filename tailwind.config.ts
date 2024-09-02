@@ -16,6 +16,7 @@ const config: Config = {
     },
     fontFamily: {
       sans: ["Proxima Nova"],
+      serif:["Nohemi bold"]
     },
   },
   plugins: [],

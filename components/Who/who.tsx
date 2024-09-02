@@ -38,7 +38,7 @@ const ChooseTravellers = () => {
   return (
     <div className="flex flex-col items-center p-4 bg-white">
       <div className="flex justify-center  items-center text-center w-full">
-        <h2 className="text-xl font-bold text-black text-center items-center">Choose your travellers</h2>
+        <h2 className="text-xl font-bold text-black text-center items-center font-serif">Choose your travellers</h2>
       </div>
       <div className="flex justify-around w-full mt-4">
         {travellers.map((traveller) => (
