@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import './DatePicker.css';
 
-const DatePicker = () => {
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+const DatePicker: React.FC = () => {
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<Date | null>(null);
+    const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
+    const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
 
     useEffect(() => {
         const url = new URL(window.location.href);
@@ -17,7 +17,7 @@ const DatePicker = () => {
         }
     }, []);
 
-    const handleDateClick = (date) => {
+    const handleDateClick = (date: Date) => {
         const url = new URL(window.location.href);
 
         url.searchParams.set('dateRange', ``);
@@ -43,11 +43,9 @@ const DatePicker = () => {
                 window.history.pushState({}, '', url.pathname + url.search);
             }
         }
-        console.log('startDate', startDate);
-        console.log('endDate', endDate);
     };
 
-    const renderDays = (month, year) => {
+    const renderDays = (month: number, year: number) => {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const firstDay = new Date(year, month, 1).getDay();
         const days = [];
@@ -65,27 +63,20 @@ const DatePicker = () => {
             days.push(
                 <div
                     key={day}
-                    className={`text-black font-medium day ${isSelected ? 'selected' : ''} ${isFirstSelected ? 'rounded-s' : ''} ${isLastSelected ? 'rounded-e' : ''} ${
-                        isInRange ? 'in-range' : ''
-                    }  ${
-                        isInRange && startDate && (date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 6 ? 'rounded-se' : ''
-                    } ${
-                        isInRange && endDate && (endDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 6 ? 'rounded-ee' : ''
-                    } ${
-                        isInRange && date.getDate() <= 7 && date.getDay() === 6 ? 'rounded-se' : ''
-                    }
-                    ${
-                        isInRange && date.getDate() >= new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() && date.getDay() === 6 ? 'rounded-ee' : ''
-                    }
-                    ${
-                        isInRange && date.getDate() <= 7 && date.getDay() === 0 ? 'rounded-ss' : ''
-                    }
-                    ${
-                        isInRange && 
-                        ((endDate && (endDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 0) ||
-                        (date.getDate() >= new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() - 6 && date.getDay() === 0))
-                        ? 'rounded-es' : ''
-                    }
+                    className={`text-black font-medium day ${isSelected ? 'selected' : ''} ${isFirstSelected ? 'rounded-s' : ''} ${isLastSelected ? 'rounded-e' : ''} ${isInRange ? 'in-range' : ''
+                        }  ${isInRange && startDate && (date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 6 ? 'rounded-se' : ''
+                        } ${isInRange && endDate && (endDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 6 ? 'rounded-ee' : ''
+                        } ${isInRange && date.getDate() <= 7 && date.getDay() === 6 ? 'rounded-se' : ''
+                        }
+                    ${isInRange && date.getDate() >= new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() && date.getDay() === 6 ? 'rounded-ee' : ''
+                        }
+                    ${isInRange && date.getDate() <= 7 && date.getDay() === 0 ? 'rounded-ss' : ''
+                        }
+                    ${isInRange &&
+                            ((endDate && (endDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 0) ||
+                                (date.getDate() >= new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() - 6 && date.getDay() === 0))
+                            ? 'rounded-es' : ''
+                        }
                     `}
                     onClick={() => handleDateClick(date)}
                 >
@@ -97,8 +88,8 @@ const DatePicker = () => {
         return days;
     };
 
-    const renderMonth = (month, year) => (
-        <div className="w-[48%]">
+    const renderMonth = (month: number, year: number) => (
+        <div className="w-[100%] md:w-[48%]">
             <div className="text-center text-black font-bold mb-2">
                 {new Date(year, month).toLocaleString('default', { month: 'long' })} {year}
             </div>
@@ -130,27 +121,30 @@ const DatePicker = () => {
     };
 
     return (
-        <div className="date-range-picker">
-            <div className="flex space-between cursor-pointer mb-4">
-            <div onClick={handlePreviousMonth} className="text-gray-600 hover:text-gray-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                    </svg>
+        <div className='data-range-picker-wrapper'>
+            <div className="date-range-picker">
+                <div className="flex space-between cursor-pointer mb-4">
+                    <div onClick={handlePreviousMonth} className="text-gray-600 hover:text-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </div>
+                </div>
+                <div className='overflow-y-auto h-[40vh] md:h-auto'>
+                    <div className="flex flex-col md:flex-row justify-between">
+                        {renderMonth(currentMonth, currentYear)}
+                        {renderMonth((currentMonth + 1) % 12, currentMonth === 11 ? currentYear + 1 : currentYear)}
+
+                    </div>
+                </div>
+                <div className="flex justify-between cursor-pointer mb-4">
+                    <div onClick={handleNextMonth} className="text-gray-600 hover:text-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
                 </div>
             </div>
-            <div className="flex justify-between">
-                {renderMonth(currentMonth, currentYear)}
-                {renderMonth((currentMonth + 1) % 12, currentMonth === 11 ? currentYear + 1 : currentYear)}
-              
-            </div>
-            <div className="flex justify-between cursor-pointer mb-4">
-            <div onClick={handleNextMonth} className="text-gray-600 hover:text-gray-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </div>
-            </div>
-           
         </div>
     );
 };

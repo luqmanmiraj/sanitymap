@@ -83,3 +83,6 @@ body {
 .gm-style-iw{
   padding-left: 0 !important;
 }
+
+
+.scrollbar-hide::-webkit-scrollbar {display:none;}

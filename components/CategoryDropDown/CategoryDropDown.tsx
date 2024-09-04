@@ -11,7 +11,6 @@ const CategoryDropDown: React.FC<CategoryDropDownProps> = ({ selectedCategories,
   const [selectedActivities, setSelectedActivities] = useState<string[]>([...selectedCategories]);
   const [isVisible, setIsVisible] = useState(true);
 
-  console.log(category);
 
   const handleClearAll = () => {
     setSelectedActivities([]);

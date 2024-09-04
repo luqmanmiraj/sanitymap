@@ -2,11 +2,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { sanityAllPosts } from '../../src/sanity/lib/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const POSTS_COUNT = 6;
-  const EVENTS_QUERY = (page: number, limit: number, categories: string[], bounds: { south: number, west: number, north: number, east: number }) => {
+  const EVENTS_QUERY = (page: number, categories: string[], bounds: { south: number, west: number, north: number, east: number },query:string | null) => {
     const categoryFilter = categories.length > 0 ? `&& count((categories[]->slug.current)[@ in [${categories.map(cat => `"${cat}"`).join(', ')}]]) > 0` : '';
     const boundsFilter = bounds ? `&& location.lat >= ${bounds.south} && location.lat <= ${bounds.north} && location.lng >= ${bounds.west} && location.lng <= ${bounds.east}` : '';
-    const query = `*[_type == "post" ${categoryFilter} ${boundsFilter}]{
+    const queryFilter = query ? `&& title match "*${query}*"` : ''; 
+    const squery = `*[_type == "post" ${categoryFilter} ${boundsFilter} ${queryFilter}]{
       ...,
       "categoryDetail": categories[]->{ ..., "parentCategory": parentCategory-> },
       "imageUrl": mainImage.asset->url,
@@ -16,29 +16,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       "Cuisine": cuisine[]->title,
       "Cravings": cravings[]->title,
     }`;
-    return query;
+
+    return squery;
   };
-  const TOTAL_POSTS_QUERY = (categories: string[], bounds: { south: number, west: number, north: number, east: number }) => {
+  const TOTAL_POSTS_QUERY = (categories: string[], bounds: { south: number, west: number, north: number, east: number },query:string | null) => {
     const categoryFilter = categories.length > 0 ? `&& count((categories[]->slug.current)[@ in [${categories.map(cat => `"${cat}"`).join(', ')}]]) > 0` : '';
     const boundsFilter = bounds ? `&& location.lat >= ${bounds.south} && location.lat <= ${bounds.north} && location.lng >= ${bounds.west} && location.lng <= ${bounds.east}` : '';
-    return `count(*[_type == "post" ${categoryFilter} ${boundsFilter}])`;
+    const queryFilter = query ? `&& title match "*${query}*"` : ''; 
+    return `count(*[_type == "post" ${categoryFilter} ${boundsFilter} ${queryFilter}])`;
   };
 
   const url = new URL(req.url || '', `https://${req.headers.host}`);
-  console.log(url);
   const bounds = url.searchParams.get('bounds') ? JSON.parse(url.searchParams.get('bounds')!) : null;
   const page = url.searchParams.get('page') || '1';
-  const limit = url.searchParams.get('limit') ? parseInt(url.searchParams.get('limit') || POSTS_COUNT.toString()) : POSTS_COUNT;
   const pageNumber = parseInt(page);
   const categories = url.searchParams.get('categories') ? url.searchParams.get('categories')!.split(',') : [];
-  console.log(categories);
+  const query=url.searchParams.get('query') ? url.searchParams.get('query') : '';
 
   try {
     const posts = await sanityAllPosts({
-      query: EVENTS_QUERY(pageNumber, limit, categories, bounds),
+      query: EVENTS_QUERY(pageNumber, categories, bounds,query),
     });
     const totalPosts = await sanityAllPosts({
-      query: TOTAL_POSTS_QUERY(categories, bounds),
+      query: TOTAL_POSTS_QUERY(categories, bounds,query),
     });
 
     res.status(200).json({ posts, totalPosts });

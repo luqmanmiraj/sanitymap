@@ -1,6 +1,14 @@
 import React from 'react';
 
-const ResultCard = ({ title, description, image, rating, price }) => {
+interface ResultCardProps {
+  title: string;
+  description: string;
+  image: string;
+  rating: number;
+  price: number;
+}
+
+const ResultCard: React.FC<ResultCardProps> = ({ title, description, image, rating, price }) => {
   return (
     <div className="result-card bg-white rounded-lg shadow-md overflow-hidden m-4">
       <div className="relative">

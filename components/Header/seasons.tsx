@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+
+
 export default function Seasons() {
   const [activeSeason, setActiveSeason] = useState('');
 
@@ -19,7 +21,7 @@ export default function Seasons() {
   };
 
   return (
-    <div className="flex justify-center gap-8 mt-8">
+    <div className="flex justify-center mt-8 md:gap-14 gap-4">
       <a
         href="#"
         className={`flex flex-col items-center ${activeSeason === 'Spring' || activeSeason === '' ? 'active' : ''}`}

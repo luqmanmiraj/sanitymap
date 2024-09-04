@@ -26,7 +26,6 @@ const SEASONS_QUERY = `*[_type == "season"]{name, _id}`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const url = new URL(req.url || '', `https://${req.headers.host}`);
-    console.log(url);
     const lat = url.searchParams.get('lat');
     const lng = url.searchParams.get('lng');
   try {

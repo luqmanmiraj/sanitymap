@@ -17,7 +17,13 @@ const Preferences: React.FC = () => {
   };
 
   const handleUpdateSorting = () => {
-    console.log('update sorting');
+    const url = new URL(window.location.href);
+    url.searchParams.set('explorerTypes', explorerTypes.join(','));
+    url.searchParams.set('budget', budget);
+    url.searchParams.set('accessibility', accessibility.join(','));
+    url.searchParams.set('languages', languages.join(','));
+    window.history.pushState({}, '', url.toString());
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -72,7 +78,7 @@ const Preferences: React.FC = () => {
       </div>
       <div className="mb-6">
         <h3 className="text-xl text-black font-semibold mb-2 font-serif">Explorer Type</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 text-black gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 text-black gap-2">
           {['Foodie', 'Adventurer', 'Family Focused', 'Outdoorsy', '2SLGBTQIA+', 'Romantic', 'Arts & Culture Fan', 'Business Traveller', 'Hipster', 'Luxury Traveller', 'Accessible Traveller', 'Cruise Traveller', 'Eco-Conscious', 'Pet Owner', 'Day Tripper'].map(type => (
             <label key={type} className="flex items-center">
               <input
