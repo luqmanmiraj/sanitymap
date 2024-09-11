@@ -90,7 +90,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ selectedCategories, categorie
               </span>
               {visibleCategory === category._id && (
                 <div style={{ position: 'fixed', top: dropdownPosition.top, left: dropdownPosition.left, zIndex: 9999, color: 'black' }}>
-                  <CategoryDropDown selectedCategories={selectedCategories} category={category} handleCategoriesSelected={handleCategoriesSelected} children={selectedCategoryChildren} />
+                  <CategoryDropDown selectedCategories={selectedCategories} category={category} handleCategoriesSelected={handleCategoriesSelected} />
                 </div>
               )}
             </React.Fragment>

@@ -1,7 +1,6 @@
 import React, { useState, ReactNode, useEffect } from 'react';
 
 interface CategoryDropDownProps {
-  children: ReactNode[];
   category: { childCategories: { slug: { current: string }, title: string }[] , title: string };
   handleCategoriesSelected: (selectedActivities: string[]) => void;
   selectedCategories: string[]; // Added this line
