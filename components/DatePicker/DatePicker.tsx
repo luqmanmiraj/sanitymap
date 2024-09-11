@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import './DatePicker.css';
 
-const DatePicker: React.FC = () => {
+
+interface DatePickerProps {
+    fetchEvents: () => void;
+    handleSelection: (selection: string) => void;
+}
+
+const DatePicker: React.FC<DatePickerProps> = ({fetchEvents, handleSelection}:DatePickerProps) => {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
@@ -42,6 +48,12 @@ const DatePicker: React.FC = () => {
                 url.searchParams.set('dateRange', `${startDate.toISOString().split('T')[0]}_${date.toISOString().split('T')[0]}`);
                 window.history.pushState({}, '', url.pathname + url.search);
             }
+        }
+        fetchEvents();
+        if (startDate && endDate) {
+            const start = startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const end = endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            handleSelection(`${start} to ${end}`);
         }
     };
 

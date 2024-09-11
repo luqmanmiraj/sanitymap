@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { GoogleMap as GoogleMapComponent, LoadScript, Marker, MarkerClusterer, MarkerF, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap as GoogleMapComponent, LoadScript, Marker, MarkerClusterer, InfoWindow } from '@react-google-maps/api';
 
 interface Post {
   lat: number;
@@ -7,7 +7,7 @@ interface Post {
 }
 
 interface GoogleMapProps {
-  events: any;
+  events: Event[];
   updateBounds: (newBounds: google.maps.LatLngBounds) => void;
 }
 
@@ -21,11 +21,13 @@ interface Event {
     parentCategory: {
       description: string;
     };
-  }>
+  }>;
+  imageUrl?: string;
+  title: string;
 }
 
 const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
-  const [userLocation, setUserLocation] = useState({ lat: 52.5, lng: -104 });
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>({ lat: 53.30342311087591, lng: -106.04571038409554 });
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [hovered, setHovered] = useState(false);
@@ -33,25 +35,25 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.error('Error getting user location:', error);
-        }
-      );
-    }
+    // if (navigator.geolocation) {
+    //   navigator.geolocation.getCurrentPosition(
+    //     (position) => {
+    //       setUserLocation({
+    //         lat: position.coords.latitude,
+    //         lng: position.coords.longitude
+    //       });
+    //     },
+    //     (error) => {
+    //       console.error('Error getting user location:', error);
+    //     }
+    //   );
+    // }
   }, []);
 
   const fetchPosts = useCallback(async (bounds: google.maps.LatLngBounds) => {
     const ne = bounds.getNorthEast();
     const sw = bounds.getSouthWest();
-
+    // Fetch posts logic here
   }, []);
 
   const onBoundsChanged = () => {
@@ -65,7 +67,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
   };
 
   const mapRef = useRef<google.maps.Map | null>(null);
-  // const anchor = new google.maps.Point(16, 16);
+
   const onLoad = (map: google.maps.Map) => {
     mapRef.current = map;
     const mapBounds = map.getBounds();
@@ -73,9 +75,6 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
       fetchPosts(mapBounds);
       updateBounds(mapBounds);
     }
-    // const anchor = new google.maps.Point(16, 16);
-
-
   };
 
   const svgMarker = {
@@ -100,7 +99,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
     setSelectedEvent(null);
   };
 
-  function getMarkerIcon(circleColor) {
+  function getMarkerIcon(circleColor: string) {
     return {
       url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
       <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
@@ -114,7 +113,6 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
     };
   }
 
-
   const getClusterStyle = () => {
     if (clicked) {
       return `%23000000`; // Black color when clicked
@@ -124,14 +122,13 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
       return `%23F77E2D`; // Default color
     }
   };
-
-
+  const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
   return (
-    <LoadScript googleMapsApiKey="AIzaSyBXV0elgfYX_C0zJCVkrHpQXLQdxIa5t_0">
+    <LoadScript googleMapsApiKey={googleMapsApiKey}>
       <GoogleMapComponent
         mapContainerStyle={{ width: '100%', height: '100%' }}
         center={userLocation}
-        zoom={10}
+        zoom={5}
         onLoad={onLoad}
         onBoundsChanged={onBoundsChanged}
         options={{
@@ -308,7 +305,6 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
         }}
       >
         <Marker position={userLocation}
-
           onLoad={
             (marker) => {
               marker.setIcon(getMarkerIcon('#F77E2D'));
@@ -321,7 +317,6 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
               google.maps.event.addListener(marker, 'click', function () {
                 marker.setIcon(getMarkerIcon('#000000'));
               })
-
             }
           }
         />
@@ -338,19 +333,19 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
           onLoad={(markerCluster) => {
             let lastClickedCluster: any = null;
 
-            google.maps.event.addListener(markerCluster, 'mouseover', function (c) {
+            google.maps.event.addListener(markerCluster, 'mouseover', function (c: { clusterIcon: { div: { firstChild: HTMLImageElement; }; }; }) {
               if (c.clusterIcon.div && c.clusterIcon.div.firstChild) {
                 (c.clusterIcon.div.firstChild as HTMLImageElement).src = `data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="20" fill="%23721931" /></svg>`;
               }
             });
 
-            google.maps.event.addListener(markerCluster, 'mouseout', function (c) {
+            google.maps.event.addListener(markerCluster, 'mouseout', function (c: { clusterIcon: { div: { firstChild: HTMLImageElement; }; }; }) {
               if (c.clusterIcon.div && c.clusterIcon.div.firstChild) {
                 (c.clusterIcon.div.firstChild as HTMLImageElement).src = `data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="20" fill="%23F77E2D" /></svg>`;
               }
             });
 
-            google.maps.event.addListener(markerCluster, 'click', function (c) {
+            google.maps.event.addListener(markerCluster, 'click', function (c: { clusterIcon: { div: { firstChild: HTMLImageElement; }; }; }) {
               if (lastClickedCluster && lastClickedCluster !== c) {
                 if (lastClickedCluster.clusterIcon.div && lastClickedCluster.clusterIcon.div.firstChild) {
                   (lastClickedCluster.clusterIcon.div.firstChild as HTMLImageElement).src = `data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="20" fill="%23F77E2D" /></svg>`;
@@ -362,153 +357,153 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ events, updateBounds }) => {
               lastClickedCluster = c;
             });
           }}
-
         >
-          {(clusterer) =>
-            events.map((event: Event, index: number) => (
-              <Marker
-                key={event.location.lat + '' + event.location.lng}
-                position={{ lat: event.location.lat, lng: event.location.lng }}
-                clusterer={clusterer}
-                icon={{
-                  url: `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="20" cy="20" r="20" fill="%23889D1E" />
-          ${encodeURIComponent(event?.categoryDetail?.length > 0
-                    ? event?.categoryDetail[0]?.parentCategory?.description
-                      ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
-                        'currentColor',
-                        'white'
-                      ).replaceAll(
-                        'height=',
-                        'x="8" y="8" height='
-                      )
-                      : event?.categoryDetail[0]?.description.replaceAll(
-                        'currentColor',
-                        'white'
-                      ).replaceAll(
-                        'height=',
-                        'x="8" y="8" height='
-                      )
-                    : '')}
-          </svg>`,
-                }}
-                onClick={() => setSelectedEvent(event)}
-                onLoad={(marker) => {
-
-                  if (!marker.get('iconModified')) {
-                    const iconElement = marker.getIcon();
-                    if (iconElement) {
-                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="20" fill="%23889D1E" />
-              ${encodeURIComponent(event?.categoryDetail?.length > 0
-                        ? event?.categoryDetail[0]?.parentCategory?.description
-                          ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
-                            'currentColor',
-                            'white'
-                          ).replaceAll(
-                            'height=',
-                            'x="8" y="8" height='
-                          )
-                          : event?.categoryDetail[0]?.description.replaceAll(
-                            'currentColor',
-                            'white'
-                          ).replaceAll(
-                            'height=',
-                            'x="8" y="8" height='
-                          )
-                        : '')}
-            </svg>`;
-                      marker.setIcon(iconElement);
-                      marker.set('iconModified', true);
-                    }
-                  }
-
-                  google.maps.event.addListener(marker, 'mouseover', function () {
-                    const iconElement = marker.getIcon();
-                    if (iconElement) {
-                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="20" fill="%234B612C" />
+          {(clusterer) => (
+            <>
+              {events.map((event: Event, index: number) => (
+                <Marker
+                  key={event.location.lat + '' + event.location.lng}
+                  position={{ lat: event.location.lat, lng: event.location.lng }}
+                  clusterer={clusterer}
+                  icon={{
+                    url: `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="20" fill="%23889D1E" />
             ${encodeURIComponent(event?.categoryDetail?.length > 0
-                        ? event?.categoryDetail[0]?.parentCategory?.description
-                          ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
-                            'currentColor',
-                            'white'
-                          ).replaceAll(
-                            'height=',
-                            'x="8" y="8" height='
-                          )
-                          : event?.categoryDetail[0]?.description.replaceAll(
-                            'currentColor',
-                            'white'
-                          ).replaceAll(
-                            'height=',
-                            'x="8" y="8" height='
-                          )
-                        : '')}
+                      ? event?.categoryDetail[0]?.parentCategory?.description
+                        ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
+                          'currentColor',
+                          'white'
+                        ).replaceAll(
+                          'height=',
+                          'x="8" y="8" height='
+                        )
+                        : event?.categoryDetail[0]?.description.replaceAll(
+                          'currentColor',
+                          'white'
+                        ).replaceAll(
+                          'height=',
+                          'x="8" y="8" height='
+                        )
+                      : '')}
+            </svg>`,
+                  }}
+                  onClick={() => setSelectedEvent(event)}
+                  onLoad={(marker) => {
+
+                    if (!marker.get('iconModified')) {
+                      const iconElement = marker.getIcon();
+                      if (iconElement && typeof iconElement === 'object' && 'url' in iconElement) {
+                        iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="%23889D1E" />
+                ${encodeURIComponent(event?.categoryDetail?.length > 0
+                          ? event?.categoryDetail[0]?.parentCategory?.description
+                            ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
+                              'currentColor',
+                              'white'
+                            ).replaceAll(
+                              'height=',
+                              'x="8" y="8" height='
+                            )
+                            : event?.categoryDetail[0]?.description.replaceAll(
+                              'currentColor',
+                              'white'
+                            ).replaceAll(
+                              'height=',
+                              'x="8" y="8" height='
+                            )
+                          : '')}
+              </svg>`;
+                        marker.setIcon(iconElement);
+                        marker.set('iconModified', true);
+                      }
+                    }
+
+                    google.maps.event.addListener(marker, 'mouseover', function () {
+                      const iconElement = marker.getIcon();
+                      if (iconElement && typeof iconElement === 'object' && 'url' in iconElement) {
+                        iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="20" cy="20" r="20" fill="%234B612C" />
+              ${encodeURIComponent(event?.categoryDetail?.length > 0
+                          ? event?.categoryDetail[0]?.parentCategory?.description
+                            ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
+                              'currentColor',
+                              'white'
+                            ).replaceAll(
+                              'height=',
+                              'x="8" y="8" height='
+                            )
+                            : event?.categoryDetail[0]?.description.replaceAll(
+                              'currentColor',
+                              'white'
+                            ).replaceAll(
+                              'height=',
+                              'x="8" y="8" height='
+                            )
+                          : '')}
+            </svg>`;
+                        marker.setIcon(iconElement);
+                      }
+                    });
+
+                    google.maps.event.addListener(marker, 'mouseout', function () {
+                      const iconElement = marker.getIcon();
+                      if (iconElement && typeof iconElement === 'object' && 'url' in iconElement) {
+                        iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="20" cy="20" r="20" fill="%23889D1E" />
+                                            ${encodeURIComponent(event?.categoryDetail?.length > 0
+                          ? event?.categoryDetail[0]?.parentCategory?.description
+                            ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
+                              'currentColor',
+                              'white'
+                            ).replaceAll(
+                              'height=',
+                              'x="8" y="8" height='
+                            )
+                            : event?.categoryDetail[0]?.description.replaceAll(
+                              'currentColor',
+                              'white'
+                            ).replaceAll(
+                              'height=',
+                              'x="8" y="8" height='
+                            )
+                          : '')}
+                                            </svg>`;
+                        marker.setIcon(iconElement);
+                      }
+                    });
+                    google.maps.event.addListener(marker, 'click', function () {
+                      setSelectedEvent(event);
+                      setInfoWindowOpen(true);
+                      const iconElement = marker.getIcon();
+                      if (iconElement && typeof iconElement === 'object' && 'url' in iconElement) {
+                        iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="20" fill="black" />
+            ${encodeURIComponent(event?.categoryDetail?.length > 0
+                          ? event?.categoryDetail[0]?.parentCategory?.description
+                            ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
+                              'currentColor',
+                              'white'
+                            ).replaceAll(
+                              'height=',
+                              'x="8" y="8" height='
+                            )
+                            : event?.categoryDetail[0]?.description.replaceAll(
+                              'currentColor',
+                              'white'
+                            ).replaceAll(
+                              'height=',
+                              'x="8" y="8" height='
+                            )
+                          : '')}
           </svg>`;
-                      marker.setIcon(iconElement);
-                    }
-                  });
-
-                  google.maps.event.addListener(marker, 'mouseout', function () {
-                    const iconElement = marker.getIcon();
-                    if (iconElement) {
-                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="20" cy="20" r="20" fill="%23889D1E" />
-                                          ${encodeURIComponent(event?.categoryDetail?.length > 0
-                        ? event?.categoryDetail[0]?.parentCategory?.description
-                          ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
-                            'currentColor',
-                            'white'
-                          ).replaceAll(
-                            'height=',
-                            'x="8" y="8" height='
-                          )
-                          : event?.categoryDetail[0]?.description.replaceAll(
-                            'currentColor',
-                            'white'
-                          ).replaceAll(
-                            'height=',
-                            'x="8" y="8" height='
-                          )
-                        : '')}
-                          </svg>`;
-                      marker.setIcon(iconElement);
-                    }
-                  });
-                  google.maps.event.addListener(marker, 'click', function () {
-                    setSelectedEvent(event);
-                    setInfoWindowOpen(true);
-                    const iconElement = marker.getIcon();
-                    if (iconElement) {
-                      iconElement.url = `data:image/svg+xml;charset=UTF-8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="20" fill="black" />
-          ${encodeURIComponent(event?.categoryDetail?.length > 0
-                        ? event?.categoryDetail[0]?.parentCategory?.description
-                          ? event?.categoryDetail[0]?.parentCategory?.description.replaceAll(
-                            'currentColor',
-                            'white'
-                          ).replaceAll(
-                            'height=',
-                            'x="8" y="8" height='
-                          )
-                          : event?.categoryDetail[0]?.description.replaceAll(
-                            'currentColor',
-                            'white'
-                          ).replaceAll(
-                            'height=',
-                            'x="8" y="8" height='
-                          )
-                        : '')}
-        </svg>`;
-                      marker.setIcon(iconElement);
-                    }
-                  });
-                }}
-              />
-
-            ))
-          }
+                        marker.setIcon(iconElement);
+                      }
+                    });
+                  }}
+                />
+              ))}
+            </>
+          )}
         </MarkerClusterer>
           {
             selectedEvent && infoWindowOpen && (

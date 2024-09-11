@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
+interface SeasonsProps {
+  fetchEvents: () => void;
+  handleSelection: (selection: string) => void;
+}
 
-
-export default function Seasons() {
-  const [activeSeason, setActiveSeason] = useState('');
+export default function Seasons({ fetchEvents, handleSelection }: SeasonsProps) {
+  const [activeSeason, setActiveSeason] = useState<string>('');
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -18,6 +21,8 @@ export default function Seasons() {
     const url = new URL(window.location.href);
     url.searchParams.set('season', season.toLowerCase().replace('#', ''));
     window.history.pushState({}, '', url.pathname + url.search);
+    fetchEvents();
+    handleSelection(season);
   };
 
   return (

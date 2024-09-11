@@ -5,7 +5,12 @@ const months: string[] = [
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
-const Months: React.FC = () => {
+interface MonthsProps {
+    fetchEvents: () => void;
+    handleSelection: (selection: string) => void;
+}
+
+    const Months: React.FC<MonthsProps> = ({fetchEvents, handleSelection}:MonthsProps) => {
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
 
     useEffect(() => {
@@ -25,8 +30,10 @@ const Months: React.FC = () => {
         url.searchParams.set('month', months[index]);
         url.searchParams.delete('season');
         window.history.pushState({}, '', url.pathname + url.search);
-    url.searchParams.delete('dateRange');
-    window.history.pushState({}, '', url.pathname + url.search);
+        url.searchParams.delete('dateRange');
+        window.history.pushState({}, '', url.pathname + url.search);
+        fetchEvents();
+        handleSelection(months[index]);
     };
 
     return (

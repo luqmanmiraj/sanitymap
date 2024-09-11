@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 const travellers = [
   { label: 'Solo', icon: <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,6 +34,17 @@ const ChooseTravellers = () => {
     url.searchParams.set('travellers', updatedTravellers.map(traveller => traveller.toLowerCase()).join(','));
     window.history.pushState({}, '', url.pathname + url.search);
   };
+
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const travellersParam = url.searchParams.get('travellers');
+    if (travellersParam) {
+      const travellersArray = travellersParam.split(',').map(traveller => traveller.charAt(0).toUpperCase() + traveller.slice(1));
+      setSelectedTravellers(travellersArray);
+    }
+    
+  }, []);
 
   return (
     <div className="flex flex-col items-center p-4 bg-white">

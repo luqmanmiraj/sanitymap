@@ -87,11 +87,11 @@ export default function Page() {
 
     const handleSeasonsSelected = (selectedSeason: string) => {
         setSelectedSeason(selectedSeason);
-    };
+    }
 
     const fetchEvents = useCallback(async () => {
         try {
-            // setLoading(true);
+            setLoading(true);
             const url = new URL(window.location.href);
             window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
             const response = await fetch(`/api/posts?${url.searchParams.toString()}`);
@@ -101,6 +101,9 @@ export default function Page() {
             setTotalPosts(data.totalPosts);
         } catch (error) {
             console.error('Failed to fetch events:', error);
+        }
+        finally {
+            setLoading(false);
         }
     }, []);
 
@@ -145,7 +148,7 @@ export default function Page() {
             } catch (error) {
                 console.error('Failed to fetch events:', error);
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         };
 
@@ -209,7 +212,7 @@ export default function Page() {
 
     return (
         <div className="home-page p-1 md:p-7 bg-white" >
-            <Header selectedSeason={selectedSeason} handleSeasonsSelected={handleSeasonsSelected} />
+            <Header selectedSeason={selectedSeason} handleSeasonsSelected={handleSeasonsSelected} fetchEvents={fetchEvents} />
             <HeroSection selectedCategories={Array.from(selectedCategories)} categories={data.categories} handleCategoriesSelected={handleCategoriesSelected} handleSearchQuery={handleSearchQuery} query={query || ''} />
             {allPosts.length > 0 &&
                 <p className="text-gray-500 m-4 text-black">
@@ -236,7 +239,7 @@ export default function Page() {
                             </button>
                         )}
                         <div className="w-full h-[700px] rounded-[32px] overflow-hidden">
-                            <GoogleMap events={allPosts} updateBounds={updateBounds} />
+                            <GoogleMap events={allPosts as any} updateBounds={updateBounds} />
                         </div>
                     </div>
                 </div>
