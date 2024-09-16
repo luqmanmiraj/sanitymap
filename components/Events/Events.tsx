@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Map from '../Map/Map';
 
-interface CategoryNavProps {
+interface EventsProps {
   events: any[];
   loading: boolean;
   budget: string;
@@ -10,7 +10,7 @@ interface CategoryNavProps {
   accessibility: string[];
 }
 
-const CategoryNav: React.FC<CategoryNavProps> = ({ events, loading, budget, explorerTypes, languages, accessibility }) => {
+const Events: React.FC<EventsProps> = ({ events, loading, budget, explorerTypes, languages, accessibility }) => {
 
   const [fadeIn, setFadeIn] = useState(false);
   useEffect(() => {
@@ -124,4 +124,4 @@ const CategoryNav: React.FC<CategoryNavProps> = ({ events, loading, budget, expl
   );
 };
 
-export default CategoryNav;
+export default Events;

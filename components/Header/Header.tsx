@@ -25,6 +25,7 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
   const moreButtonRef = useRef<HTMLButtonElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [bgImageLoaded, setBgImageLoaded] = useState(false);
 
   const toggleModal = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -112,12 +113,20 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
     };
   }, []);
 
+  useEffect(() => {
+    if (isVisible) {
+      const img = new Image();
+      img.src = '/images/map-main.jpg';
+      img.onload = () => setBgImageLoaded(true);
+    }
+  }, [isVisible]);
+
   return (
     <>
       <header
         ref={headerRef}
         className={`relative w-full h-[306px] bg-cover bg-center rounded-[30px] sm:h-60 transition-opacity transition-transform duration-1000 ease-in-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-        style={{ backgroundImage: `url('/images/map-main.jpg')`, backgroundPosition: 'center' }}
+        style={{ backgroundImage: bgImageLoaded ? `url('/images/map-main.jpg')` : 'none', backgroundPosition: 'center' }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-50 rounded-[30px]">
           <div className="container mx-auto h-full flex flex-col justify-center items-center px-4 py-6">
