@@ -128,23 +128,7 @@ export default function Page() {
                 window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
                 const response = await fetch(`/api/data?${url.searchParams.toString()}`);
                 const data = await response.json();
-                const sortedPosts = data.posts.sort((a: any, b: any) => calculateMatchPercentage(
-                    b,
-                    urlParams.get('budget') || '',
-                    urlParams.get('explorerTypes')?.split(',') || [],
-                    urlParams.get('languages')?.split(',') || [],
-                    urlParams.get('accessibility')?.split(',') || []
-                ) - calculateMatchPercentage(
-                    a,
-                    urlParams.get('budget') || '',
-                    urlParams.get('explorerTypes')?.split(',') || [],
-                    urlParams.get('languages')?.split(',') || [],
-                    urlParams.get('accessibility')?.split(',') || []
-                ));
-                // setDisplayedPosts(sortedPosts.slice(0, POSTS_PER_PAGE));
-                // setAllPosts(sortedPosts);
                 setData({ categories: data.categories });
-                // setTotalPosts(data.totalPosts);
             } catch (error) {
                 console.error('Failed to fetch events:', error);
             } finally {

@@ -1,16 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sanityAllPosts } from '../../src/sanity/lib/client';
 // const POSTS_COUNT = 6;
-const EVENTS_QUERY = `*[_type == "post"]{
-  ...,
-  "imageUrl": mainImage.asset->url,
-      "Explorer": explorer[]->title,
-      "Accessibility": accessibility[]->title,
-      "Language": language[]->title,
-      "Cuisine": cuisine[]->title,
-      "Cravings": cravings[]->title,
-}`;
-const TOTAL_POSTS_QUERY = `count(*[_type == "post"])`;
+// const EVENTS_QUERY = `*[_type == "post"]{
+//   ...,
+//   "imageUrl": mainImage.asset->url,
+//       "Explorer": explorer[]->title,
+//       "Accessibility": accessibility[]->title,
+//       "Language": language[]->title,
+//       "Cuisine": cuisine[]->title,
+//       "Cravings": cravings[]->title,
+// }`;
+// const TOTAL_POSTS_QUERY = `count(*[_type == "post"])`;
 // const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]{title, slug, _id}`;
 const CATEGORIES_QUERY = `*[_type == "category" && (!defined(parentCategory) || parentCategory == null)]| order(sortorder asc){
   ...,
@@ -29,12 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const lat = url.searchParams.get('lat');
     const lng = url.searchParams.get('lng');
   try {
-    const posts = await sanityAllPosts({
-      query: EVENTS_QUERY,
-    });
-    const totalPosts = await sanityAllPosts({
-      query: TOTAL_POSTS_QUERY,
-    });
     const categories = await sanityAllPosts({
       query: CATEGORIES_QUERY,
     });
@@ -53,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const seasons = await sanityAllPosts({
       query: SEASONS_QUERY,
     });
-    res.status(200).json({ posts, totalPosts, categories, accessibility, languages, explorers, participants, seasons });
+    res.status(200).json({ categories, accessibility, languages, explorers, participants, seasons });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch posts' });
   }
