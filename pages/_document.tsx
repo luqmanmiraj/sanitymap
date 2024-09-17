@@ -4,8 +4,9 @@ export default function Document() {
   return (
     <Html>
       <Head />
+      <title>Sanity Map</title>
       <link
-          rel="stylesheet"
+        rel="stylesheet"
           href="/fonts/fonts.min.css"
           as="text/css"
           crossOrigin=""
@@ -16,6 +17,7 @@ export default function Document() {
           as="text/css"
           crossOrigin=""
         />
+        <meta name="description" content="Explore and discover events with Sanity Map - your interactive guide to local happenings and attractions." />
       <body>
         <Main />
         <NextScript />
