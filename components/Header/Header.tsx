@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
 
   const toggleModal = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
-    setModalPosition({ top: rect.bottom + window.scrollY, left: rect.left + rect.width / 2 + window.scrollX });
+    setModalPosition({ top: rect.bottom, left: rect.left + rect.width / 2 + window.scrollX });
     setShowModal(!showModal);
     setShowWhoModal(false);
     setShowMoreModal(false);
@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
 
   const toggleWhoModal = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
-    setWhoModalPosition({ top: rect.bottom + window.scrollY, left: rect.left + rect.width / 2 + window.scrollX });
+    setWhoModalPosition({ top: rect.bottom , left: rect.left + rect.width / 2 + window.scrollX });
     setShowWhoModal(!showWhoModal);
     setShowModal(false);
     setShowMoreModal(false);
@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
 
   const toggleMoreModal = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
-    setMoreModalPosition({ top: rect.bottom + window.scrollY, left: rect.left + rect.width / 2 + window.scrollX });
+    setMoreModalPosition({ top: rect.bottom, left: rect.left + rect.width / 2 + window.scrollX });
     setShowMoreModal(!showMoreModal);
     setShowModal(false);
     setShowWhoModal(false);
@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
 
   const handleSelection = (selection: string) => {
     setSelectedText(selection);
-    setShowModal(false);
+    // setShowModal(false);
   };
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
       languages.length;
 
     setMoreButtonText(count > 1 ? count : 0);
-  }, [handleSeasonsSelected, handleSelection, showWhoModal]);
+  }, [handleSeasonsSelected, showWhoModal]);
 
   useEffect(() => {
     if (showModal || showWhoModal || showMoreModal) {

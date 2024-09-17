@@ -15,17 +15,20 @@ const DatePicker: React.FC<DatePickerProps> = ({fetchEvents, handleSelection}:Da
 
     useEffect(() => {
         const url = new URL(window.location.href);
-        const dateRange = url.searchParams.get('dateRange');
+        const dateRange = url.searchParams.getAll('dateRange').pop();
         if (dateRange) {
             const [start, end] = dateRange.split('_');
-            setStartDate(new Date(start));
-            setEndDate(new Date(end));
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            setStartDate(startDate);
+            setEndDate(endDate);
+            setCurrentMonth(startDate.getMonth());
+            setCurrentYear(startDate.getFullYear());
         }
     }, []);
 
     const handleDateClick = (date: Date) => {
         const url = new URL(window.location.href);
-
         url.searchParams.set('dateRange', ``);
         window.history.pushState({}, '', url.pathname + url.search);
         url.searchParams.delete('month');
@@ -40,12 +43,12 @@ const DatePicker: React.FC<DatePickerProps> = ({fetchEvents, handleSelection}:Da
             if (date < startDate) {
                 setEndDate(startDate);
                 setStartDate(date);
-                url.searchParams.set('dateRange', `${date.toISOString().split('T')[0]}_${startDate.toISOString().split('T')[0]}`);
+                url.searchParams.set('dateRange', `${date.toLocaleDateString('en-CA')}_${startDate.toLocaleDateString('en-CA')}`);
                 window.history.pushState({}, '', url.pathname + url.search);
 
             } else {
                 setEndDate(date);
-                url.searchParams.set('dateRange', `${startDate.toISOString().split('T')[0]}_${date.toISOString().split('T')[0]}`);
+                url.searchParams.set('dateRange', `${startDate.toLocaleDateString('en-CA')}_${date.toLocaleDateString('en-CA')}`);
                 window.history.pushState({}, '', url.pathname + url.search);
             }
         }
@@ -72,11 +75,12 @@ const DatePicker: React.FC<DatePickerProps> = ({fetchEvents, handleSelection}:Da
             const isLastSelected = endDate && date.toDateString() === endDate.toDateString();
             const isSelected = isFirstSelected || isLastSelected;
             const isInRange = startDate && endDate && date > startDate && date < endDate;
+            console.log(endDate, date < endDate ,date.toDateString(),endDate?.toDateString(),isLastSelected);
+            console.log(isInRange);
             days.push(
                 <div
                     key={day}
-                    className={`text-black font-medium day ${isSelected ? 'selected' : ''} ${isFirstSelected ? 'rounded-s' : ''} ${isLastSelected ? 'rounded-e' : ''} ${isInRange ? 'in-range' : ''
-                        }  ${isInRange && startDate && (date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 6 ? 'rounded-se' : ''
+                    className={` ${isInRange && !isLastSelected ? 'in-range' : ''} text-black font-medium day ${isSelected ? 'selected' : ''} ${isFirstSelected ? 'rounded-s' : ''} ${isLastSelected ? 'rounded-e' : ''}   ${isInRange && startDate && (date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 6 ? 'rounded-se' : ''
                         } ${isInRange && endDate && (endDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24) < 7 && date.getDay() === 6 ? 'rounded-ee' : ''
                         } ${isInRange && date.getDate() <= 7 && date.getDay() === 6 ? 'rounded-se' : ''
                         }
