@@ -26,6 +26,9 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
   const headerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [bgImageLoaded, setBgImageLoaded] = useState(false);
+  const [whoButtonText, setWhoButtonText] = useState('Who');
+  const [moreButtonText, setMoreButtonText] = useState(0);
+
 
   const toggleModal = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -59,6 +62,7 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
     setSelectedText(selection);
     setShowModal(false);
   };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const season = urlParams.get('season');
@@ -66,6 +70,11 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
     const month = urlParams.get('month');
     const monthFromUrl = month ? month.charAt(0).toUpperCase() + month.slice(1).toLowerCase() : undefined;
     const dateRangeFromUrl = urlParams.get('dateRange');
+    const travellers = urlParams.get('travellers');
+    const explorerTypes = urlParams.get('explorerTypes')?.split(',').filter(value => value !== '') || [];
+    const budget = urlParams.get('budget') || 'Low-cost';
+    const accessibility = urlParams.get('accessibility')?.split(',').filter(value => value !== '') || [];
+    const languages = urlParams.get('languages')?.split(',').filter(value => value !== '') || [];
 
     if (seasonFromUrl) {
       handleSeasonsSelected(seasonFromUrl);
@@ -79,7 +88,22 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
       handleSelection(selectionText);
       setSelectedText(selectionText);
     }
-  }, [handleSeasonsSelected, handleSelection]);
+
+    if (travellers) {
+      const travellersArray = travellers.split(',');
+      if (travellersArray.length > 1) {
+        setWhoButtonText('Who +');
+      } else {
+        setWhoButtonText('Who');
+      }
+    }
+    const count = explorerTypes.length +
+      (budget && budget !== '' ? 1 : 0) +
+      accessibility.length +
+      languages.length;
+
+    setMoreButtonText(count > 1 ? count : 0);
+  }, [handleSeasonsSelected, handleSelection, showWhoModal]);
 
   useEffect(() => {
     if (showModal || showWhoModal || showMoreModal) {
@@ -133,24 +157,24 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
             <h1 className="text-white lg:text-6xl text-2xl md:text-4xl font-bold text-center font-serif">Personalize your experience</h1>
             <nav className="flex flex-col justify-center items-center w-full max-w-md">
               <div className="bg-[#A3A3A34D] bg-opacity-30 backdrop-blur-md rounded-full flex justify-center w-full max-w-[386px] h-[70px] mt-[30px] sm:h-[60px] border border-[#BDBDBD66] p-2 sm:p-1">
-              <button ref={buttonRef} onClick={toggleModal} className={`px-4 flex-grow font-['Proxima Nova'] text-[18px] sm:text-[14px] lg:text-[20px] leading-[18px] text-center flex items-center justify-center hover:bg-opacity-50 hover:backdrop-blur-lg hover:shadow-lg hover:scale-105 transition-all duration-200 rounded-full h-full ${showModal === true ? ' outline-none bg-white focus:bg-white focus:text-black focus:outline-none text-black' : 'text-white'}`}>
-                {selectedText === 'Spring' && (
+                <button ref={buttonRef} onClick={toggleModal} className={`px-4 flex-grow font-['Proxima Nova'] text-[18px] sm:text-[14px] lg:text-[20px] leading-[18px] text-center flex items-center justify-center hover:bg-opacity-50 hover:backdrop-blur-lg hover:shadow-lg hover:scale-105 transition-all duration-200 rounded-full h-full ${showModal === true ? ' outline-none bg-white focus:bg-white focus:text-black focus:outline-none text-black' : 'text-white'}`}>
+                  {selectedText === 'Spring' && (
                     <svg
-                    width="64"
-                    height="64"
-                    viewBox="0 0 64 64"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-7 h-7"
-                  >
-                    <rect width="64" height="64" rx="32" fill={"#889D1E"} />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M32.9264 20.3743C32.8208 20.2722 32.7024 20.1909 32.5763 20.1305C32.3944 20.0434 32.1971 20 32 20C31.6653 20 31.331 20.1254 31.0737 20.3743C28.6382 22.7018 27.1232 25.7968 26.7529 29.097C24.3718 27.5236 21.5634 26.6667 18.6667 26.6667C17.9303 26.6667 17.3334 27.2636 17.3334 28C17.3334 36.1002 23.8999 42.6667 32 42.6667C40.1002 42.6667 46.6667 36.1002 46.6667 28C46.6667 27.2636 46.0698 26.6667 45.3334 26.6667C42.3449 26.6667 39.5652 27.5605 37.247 29.0953C36.8763 25.7958 35.3614 22.7014 32.9264 20.3743ZM32 23.2852C30.158 25.5071 29.1995 28.352 29.345 31.2668C29.3453 31.2712 29.3455 31.2755 29.3456 31.2799C30.4469 32.4496 31.3391 33.782 31.9981 35.219C32.6674 33.7616 33.5686 32.4328 34.6544 31.2798L34.655 31.2668C34.8006 28.352 33.8421 25.5071 32 23.2852ZM30.5829 39.9172C30.2667 37.2562 29.0661 34.7621 27.152 32.8481C25.2379 30.934 22.7438 29.7333 20.0828 29.4171C20.7293 34.9119 25.0881 39.2707 30.5829 39.9172ZM43.9174 29.416C38.4217 30.062 34.0621 34.4217 33.416 39.9173C38.9117 39.2713 43.2713 34.9117 43.9174 29.416Z"
-                      fill="white"
-                    />
-                  </svg>
+                      width="64"
+                      height="64"
+                      viewBox="0 0 64 64"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-7 h-7"
+                    >
+                      <rect width="64" height="64" rx="32" fill={"#889D1E"} />
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M32.9264 20.3743C32.8208 20.2722 32.7024 20.1909 32.5763 20.1305C32.3944 20.0434 32.1971 20 32 20C31.6653 20 31.331 20.1254 31.0737 20.3743C28.6382 22.7018 27.1232 25.7968 26.7529 29.097C24.3718 27.5236 21.5634 26.6667 18.6667 26.6667C17.9303 26.6667 17.3334 27.2636 17.3334 28C17.3334 36.1002 23.8999 42.6667 32 42.6667C40.1002 42.6667 46.6667 36.1002 46.6667 28C46.6667 27.2636 46.0698 26.6667 45.3334 26.6667C42.3449 26.6667 39.5652 27.5605 37.247 29.0953C36.8763 25.7958 35.3614 22.7014 32.9264 20.3743ZM32 23.2852C30.158 25.5071 29.1995 28.352 29.345 31.2668C29.3453 31.2712 29.3455 31.2755 29.3456 31.2799C30.4469 32.4496 31.3391 33.782 31.9981 35.219C32.6674 33.7616 33.5686 32.4328 34.6544 31.2798L34.655 31.2668C34.8006 28.352 33.8421 25.5071 32 23.2852ZM30.5829 39.9172C30.2667 37.2562 29.0661 34.7621 27.152 32.8481C25.2379 30.934 22.7438 29.7333 20.0828 29.4171C20.7293 34.9119 25.0881 39.2707 30.5829 39.9172ZM43.9174 29.416C38.4217 30.062 34.0621 34.4217 33.416 39.9173C38.9117 39.2713 43.2713 34.9117 43.9174 29.416Z"
+                        fill="white"
+                      />
+                    </svg>
                   )}
                   {selectedText === 'Summer' && (
                     <svg
@@ -241,10 +265,24 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
                       </svg>
                     )
                   }
-                
-                {selectedText}</button>
-                <button ref={whoButtonRef} onClick={toggleWhoModal} className={`px-4 flex-grow font-['Proxima Nova'] text-[18px] sm:text-[14px] lg:text-[20px] leading-[18px] text-center flex items-center justify-center hover:bg-opacity-50 hover:backdrop-blur-lg hover:shadow-lg hover:scale-105 transition-all duration-200 focus:bg-white focus:text-black focus:outline-none rounded-full h-full ${showWhoModal == true ? ' outline-none bg-white focus:bg-white focus:text-black focus:outline-none text-black' : 'text-white'}`}>Who</button>
-                <button ref={moreButtonRef} onClick={toggleMoreModal} className={`px-4 flex-grow font-['Proxima Nova'] text-[18px] sm:text-[14px] lg:text-[20px] leading-[18px] text-center flex items-center justify-center hover:bg-opacity-50 hover:backdrop-blur-lg hover:shadow-lg hover:scale-105 transition-all duration-200 focus:bg-white focus:text-black focus:outline-none rounded-full h-full ${showMoreModal == true ? ' outline-none bg-white focus:bg-white focus:text-black focus:outline-none text-black' : 'text-white'}`}>More +</button>
+
+                  {selectedText}</button>
+                <button ref={whoButtonRef} onClick={toggleWhoModal} className={`px-4 flex-grow font-['Proxima Nova'] text-[18px] sm:text-[14px] lg:text-[20px] leading-[18px] text-center flex items-center justify-center hover:bg-opacity-50 hover:backdrop-blur-lg hover:shadow-lg hover:scale-105 transition-all duration-200 focus:bg-white focus:text-black focus:outline-none rounded-full h-full ${showWhoModal == true ? ' outline-none bg-white focus:bg-white focus:text-black focus:outline-none text-black' : 'text-white'}`}>
+                  {
+                    whoButtonText
+                  }
+                </button>
+                <button
+                  ref={moreButtonRef}
+                  onClick={toggleMoreModal}
+                  data-more-button
+                  className={`px-4 flex-grow font-['Proxima Nova'] text-[18px] sm:text-[14px] lg:text-[20px] leading-[18px] text-center flex items-center justify-center hover:bg-opacity-50 hover:backdrop-blur-lg hover:shadow-lg hover:scale-105 transition-all duration-200 focus:bg-white focus:text-black focus:outline-none rounded-full h-full ${showMoreModal == true ? ' outline-none bg-white focus:bg-white focus:text-black focus:outline-none text-black' : 'text-white'}`}
+                >
+                  <span className="bg-white text-black rounded-full w-6 h-6 text-sm flex items-center justify-center mr-2">
+                    {moreButtonText}
+                  </span>
+                  More +
+                </button>
               </div>
             </nav>
             <div className="flex items-center justify-center text-white text-sm pt-4">
@@ -313,7 +351,7 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <Who />
+            <Who fetchEvents={fetchEvents} />
           </div>
         </div>}
       {showMoreModal &&

@@ -20,19 +20,22 @@ const travellers = [
    },
 ];
 
-const ChooseTravellers = () => {
+interface ChooseTravellersProps {
+  fetchEvents: () => void;
+} ;
+
+const ChooseTravellers = ({fetchEvents}: ChooseTravellersProps) => {
   const [selectedTravellers, setSelectedTravellers] = useState<string[]>([]);
 
   const handleTravellerClick = (label: string) => {
     const updatedTravellers = selectedTravellers.includes(label)
       ? selectedTravellers.filter(traveller => traveller !== label)
       : [...selectedTravellers, label];
-
     setSelectedTravellers(updatedTravellers);
-
     const url = new URL(window.location.href);
     url.searchParams.set('travellers', updatedTravellers.map(traveller => traveller.toLowerCase()).join(','));
     window.history.pushState({}, '', url.pathname + url.search);
+    fetchEvents();
   };
 
 

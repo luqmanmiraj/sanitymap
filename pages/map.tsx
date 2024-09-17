@@ -93,12 +93,14 @@ export default function Page() {
         try {
             setLoading(true);
             const url = new URL(window.location.href);
+            const urlParams = new URLSearchParams(window.location.search);
             window.history.pushState({}, '', `${url.pathname}?${url.searchParams.toString()}`);
             const response = await fetch(`/api/posts?${url.searchParams.toString()}`);
             const data = await response.json();
-            setDisplayedPosts(data.posts.slice(0, POSTS_PER_PAGE));
-            setAllPosts(data.posts);
-            setTotalPosts(data.totalPosts);
+            const sortedPosts = data.posts.sort((a: any, b: any) => calculateMatchPercentage(b, urlParams.get('budget') ?? '', urlParams.get('explorerTypes')?.split(',') ?? [], urlParams.get('languages')?.split(',') ?? [], urlParams.get('accessibility')?.split(',') ?? []) - calculateMatchPercentage(a, urlParams.get('budget') ?? '', urlParams.get('explorerTypes')?.split(',') ?? [], urlParams.get('languages')?.split(',') ?? [], urlParams.get('accessibility')?.split(',') ?? []));
+            setDisplayedPosts(sortedPosts.slice(0, POSTS_PER_PAGE));
+            setAllPosts(sortedPosts);
+            setTotalPosts(data.posts.length);
         } catch (error) {
             console.error('Failed to fetch events:', error);
         }
@@ -108,6 +110,7 @@ export default function Page() {
     }, []);
 
     useEffect(() => {
+        setLoading(true);
         const fetchData = async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const pageFromUrl = urlParams.get('page');
@@ -143,15 +146,12 @@ export default function Page() {
     const calculateMatchPercentage = (event: any, budget = '', explorerTypes: string[] = [], languages: string[] = [], accessibility: string[] = []) => {
         let totalCriteria = 0;
         let matchedCriteria = 0;
-        // Convert comma-separated strings to arrays
-        const explorerTypesArray = explorerTypes
-        const languagesArray = languages
-        const accessibilityArray = accessibility
-
-        // Count the number of criteria types provided
+        const explorerTypesArray = explorerTypes.filter(value => value != '');
+        const languagesArray = languages.filter(value => value != '');
+        const accessibilityArray = accessibility.filter(value => value != '');
         const criteriaTypes = [budget, explorerTypesArray.length > 0, languagesArray.length > 0, accessibilityArray.length > 0];
         const totalTypes = criteriaTypes.filter(Boolean).length;
-
+    
         // Check budget
         if (budget) {
             totalCriteria++;
@@ -163,39 +163,35 @@ export default function Page() {
         if (explorerTypesArray.length > 0) {
             totalCriteria++;
             const eventExplorerTypes = event.Explorer || [];
-            const explorerTypesMatch = explorerTypesArray.every(type => eventExplorerTypes.includes(type));
-            if (explorerTypesMatch) {
-                matchedCriteria++;
-            }
+            const matchedExplorerTypes = explorerTypesArray.filter(type => eventExplorerTypes.map((e: string) => e.toLowerCase()).includes(type.toLowerCase()));
+            const explorerTypesMatchPercentage = (matchedExplorerTypes.length / explorerTypesArray.length) * 100;
+            matchedCriteria += (explorerTypesMatchPercentage / 100);
         }
-
+    
         // Check languages  
         if (languagesArray.length > 0) {
             totalCriteria++;
             const eventLanguages = event.Language || [];
-            const languagesMatch = languagesArray.every(lang => eventLanguages.includes(lang));
-            if (languagesMatch) {
-                matchedCriteria++;
-            }
+            const matchedLanguages = languagesArray.filter(lang => eventLanguages.map((e: string) => e.toLowerCase()).includes(lang.toLowerCase()));
+            const languagesMatchPercentage = (matchedLanguages.length / languagesArray.length) * 100;
+            matchedCriteria += (languagesMatchPercentage / 100);
         }
-
+    
         // Check accessibility
         if (accessibilityArray.length > 0) {
             totalCriteria++;
             const eventAccessibility = event.Accessibility || [];
-            const accessibilityMatch = accessibilityArray.every(acc => eventAccessibility.includes(acc));
-            if (accessibilityMatch) {
-                matchedCriteria++;
-            }
+            const matchedAccessibility = accessibilityArray.filter(acc => eventAccessibility.map((e: string) => e.toLowerCase()).includes(acc.toLowerCase()));
+            const accessibilityMatchPercentage = (matchedAccessibility.length / accessibilityArray.length) * 100;
+            matchedCriteria += (accessibilityMatchPercentage / 100);
         }
-
         // Calculate the match percentage
         const percentage = totalTypes > 0 ? (matchedCriteria / totalTypes) * 100 : 0;
         return Math.round(percentage);
-    };
+      };
 
     return (
-        <div className='bg-white'>  
+        <div className='bg-white'>
             <div className="home-page p-1 sm:p-3 md:p-5 lg:p-7 bg-white max-w-[1440px] mx-auto" >
                 <Header selectedSeason={selectedSeason} handleSeasonsSelected={handleSeasonsSelected} fetchEvents={fetchEvents} />
                 <HeroSection selectedCategories={Array.from(selectedCategories)} categories={data.categories} handleCategoriesSelected={handleCategoriesSelected} handleSearchQuery={handleSearchQuery} query={query || ''} />

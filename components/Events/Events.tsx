@@ -24,55 +24,48 @@ const Events: React.FC<EventsProps> = ({ events, loading, budget, explorerTypes,
     }
   }, [events]);
 
-  const calculateMatchPercentage = (event: any, budget: string = '', explorerTypes: string[] = [], languages: string[] = [], accessibility: string[] = []) => {
+  const calculateMatchPercentage = (event: any, budget = '', explorerTypes: string[] = [], languages: string[] = [], accessibility: string[] = []) => {
     let totalCriteria = 0;
     let matchedCriteria = 0;
-    // Convert comma-separated strings to arrays
-    const explorerTypesArray = explorerTypes;
-    const languagesArray = languages;
-    const accessibilityArray = accessibility;
-
-    // Count the number of criteria types provided
+    const explorerTypesArray = explorerTypes.filter(value => value != '');
+    const languagesArray = languages.filter(value => value != '');
+    const accessibilityArray = accessibility.filter(value => value != '');
     const criteriaTypes = [budget, explorerTypesArray.length > 0, languagesArray.length > 0, accessibilityArray.length > 0];
     const totalTypes = criteriaTypes.filter(Boolean).length;
 
     // Check budget
     if (budget) {
-      totalCriteria++;
-      if (event.budget?.toLocaleLowerCase() === budget.toLocaleLowerCase()) {
-        matchedCriteria++;
-      }
+        totalCriteria++;
+        if (event.budget?.toLocaleLowerCase() === budget.toLocaleLowerCase()) {
+            matchedCriteria++;
+        }
     }
     // Check explorerTypes
     if (explorerTypesArray.length > 0) {
-      totalCriteria++;
-      const eventExplorerTypes = event.Explorer || [];
-      const explorerTypesMatch = explorerTypesArray.every(type => eventExplorerTypes.includes(type));
-      if (explorerTypesMatch) {
-        matchedCriteria++;
-      }
+        totalCriteria++;
+        const eventExplorerTypes = event.Explorer || [];
+        const matchedExplorerTypes = explorerTypesArray.filter(type => eventExplorerTypes.map((e: string) => e.toLowerCase()).includes(type.toLowerCase()));
+        const explorerTypesMatchPercentage = (matchedExplorerTypes.length / explorerTypesArray.length) * 100;
+        matchedCriteria += (explorerTypesMatchPercentage / 100);
     }
 
     // Check languages  
     if (languagesArray.length > 0) {
-      totalCriteria++;
-      const eventLanguages = event.Language || [];
-      const languagesMatch = languagesArray.every(lang => eventLanguages.includes(lang));
-      if (languagesMatch) {
-        matchedCriteria++;
-      }
+        totalCriteria++;
+        const eventLanguages = event.Language || [];
+        const matchedLanguages = languagesArray.filter(lang => eventLanguages.map((e: string) => e.toLowerCase()).includes(lang.toLowerCase()));
+        const languagesMatchPercentage = (matchedLanguages.length / languagesArray.length) * 100;
+        matchedCriteria += (languagesMatchPercentage / 100);
     }
 
     // Check accessibility
     if (accessibilityArray.length > 0) {
-      totalCriteria++;
-      const eventAccessibility = event.Accessibility || [];
-      const accessibilityMatch = accessibilityArray.every(acc => eventAccessibility.includes(acc));
-      if (accessibilityMatch) {
-        matchedCriteria++;
-      }
+        totalCriteria++;
+        const eventAccessibility = event.Accessibility || [];
+        const matchedAccessibility = accessibilityArray.filter(acc => eventAccessibility.map((e: string) => e.toLowerCase()).includes(acc.toLowerCase()));
+        const accessibilityMatchPercentage = (matchedAccessibility.length / accessibilityArray.length) * 100;
+        matchedCriteria += (accessibilityMatchPercentage / 100);
     }
-
     // Calculate the match percentage
     const percentage = totalTypes > 0 ? (matchedCriteria / totalTypes) * 100 : 0;
     return Math.round(percentage);

@@ -48,7 +48,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ selectedCategories, categorie
   }, [selectedCategories, cat]);
 
   const handleCategoryClick = (category: Category, event: React.MouseEvent<HTMLSpanElement>) => {
-    console.log(category.childCategories);
     const rect = event.currentTarget.getBoundingClientRect();
     setDropdownPosition({ top: rect.bottom, left: rect.left });
     setVisibleCategory(visibleCategory === category._id ? false : category._id);
