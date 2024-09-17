@@ -38,9 +38,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       query: EVENTS_QUERY(pageNumber, categories, bounds, query, season, travellers),
     });
 
-    const filteredPosts = posts.filter((post: any) => 
-      post.participant.some((p: any) => travellers.includes(p))
-    );
+    const filteredPosts = travellers.length > 0 && !(travellers.length === 1 && travellers[0] === '') 
+      ? posts.filter((post: any) => post.participant.some((p: any) => travellers.includes(p)))
+      : posts;
     res.status(200).json({ posts: filteredPosts });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch posts' });
