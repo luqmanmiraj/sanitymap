@@ -75,8 +75,6 @@ const DatePicker: React.FC<DatePickerProps> = ({fetchEvents, handleSelection}:Da
             const isLastSelected = endDate && date.toDateString() === endDate.toDateString();
             const isSelected = isFirstSelected || isLastSelected;
             const isInRange = startDate && endDate && date > startDate && date < endDate;
-            console.log(endDate, date < endDate ,date.toDateString(),endDate?.toDateString(),isLastSelected);
-            console.log(isInRange);
             days.push(
                 <div
                     key={day}
