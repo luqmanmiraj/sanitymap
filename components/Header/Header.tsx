@@ -278,9 +278,9 @@ const Header: React.FC<HeaderProps> = ({ selectedSeason, handleSeasonsSelected, 
                   data-more-button
                   className={`px-4 flex-grow font-['Proxima Nova'] text-[18px] sm:text-[14px] lg:text-[20px] leading-[18px] text-center flex items-center justify-center hover:bg-opacity-50 hover:backdrop-blur-lg hover:shadow-lg hover:scale-105 transition-all duration-200 focus:bg-white focus:text-black focus:outline-none rounded-full h-full ${showMoreModal == true ? ' outline-none bg-white focus:bg-white focus:text-black focus:outline-none text-black' : 'text-white'}`}
                 >
-                  <span className="bg-white text-black rounded-full w-6 h-6 text-sm flex items-center justify-center mr-2">
+                 { moreButtonText >0 && <span className="bg-white text-black rounded-full w-6 h-6 text-sm flex items-center justify-center mr-2">
                     {moreButtonText}
-                  </span>
+                  </span>}
                   More +
                 </button>
               </div>
